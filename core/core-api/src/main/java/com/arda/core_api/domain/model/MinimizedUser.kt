@@ -1,0 +1,5 @@
+package com.arda.core_api.domain.model
+
+data class MinimizedUser(
+    val uid : String
+)
