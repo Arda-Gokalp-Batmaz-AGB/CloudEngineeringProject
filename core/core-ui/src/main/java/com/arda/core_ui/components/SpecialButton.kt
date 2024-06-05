@@ -1,4 +1,4 @@
-package com.arda.dystherapy.components
+package com.arda.core_ui.components
 
 import android.view.MotionEvent
 import androidx.compose.animation.core.animateDpAsState
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
@@ -46,7 +45,7 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import com.arda.dystherapy.util.DebugTagsEnumUtils
+import com.arda.core_api.util.DebugTagsEnumUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

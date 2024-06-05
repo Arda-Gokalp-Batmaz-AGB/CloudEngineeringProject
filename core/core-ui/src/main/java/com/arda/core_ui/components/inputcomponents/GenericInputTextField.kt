@@ -1,4 +1,4 @@
-package com.arda.dystherapy.components.inputcomponents
+package com.arda.core_ui.components.inputcomponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,8 +20,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.arda.core_api.validation.ValidationResult
 import com.arda.core_ui.components.ErrorText
-import com.arda.dystherapy.validation.ValidationResult
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

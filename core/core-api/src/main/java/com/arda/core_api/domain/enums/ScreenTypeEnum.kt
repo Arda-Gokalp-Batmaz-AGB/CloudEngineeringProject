@@ -1,4 +1,4 @@
-package com.arda.dystherapy.domain.enums
+package com.arda.core_api.domain.enums
 
 enum class ScreenTypeEnum(val route : String) {
 //    WAITSCREEN("wait"),

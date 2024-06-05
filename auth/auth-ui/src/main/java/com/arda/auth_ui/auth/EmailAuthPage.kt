@@ -1,4 +1,4 @@
-package com.arda.dystherapy.ui.auth
+package com.arda.auth_ui.auth
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -13,12 +13,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.navigation.NavController
-import com.arda.auth_ui.auth.AuthEvent
-import com.arda.dystherapy.components.inputcomponents.GenericInputTextField
-import com.arda.dystherapy.components.inputcomponents.GenericInputTextFieldWithTrailingIcon
-import com.arda.dystherapy.util.ResourceProvider
-import com.arda.dystherapy.validation.StringResourceEnum
-import com.arda.dystherapy.model.AuthTypeEnum
+import com.arda.auth.auth_api.model.AuthTypeEnum
+import com.arda.core_ui.components.inputcomponents.GenericInputTextField
+import com.arda.core_ui.components.inputcomponents.GenericInputTextFieldWithTrailingIcon
 
 @Composable
 fun EmailAuthPage(currentAuthScreenState : AuthTypeEnum, onEvent: (AuthEvent) -> Unit, state: AuthUiState, navController: NavController) {
@@ -33,11 +30,11 @@ fun EmailAuthPage(currentAuthScreenState : AuthTypeEnum, onEvent: (AuthEvent) ->
 private fun EmailLogin(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navController: NavController) {
     GenericInputTextField(
         validationResult = state.emailError,
-        indicatorString = ResourceProvider(StringResourceEnum.EMAIL),
+        indicatorString = "Email",
         leadingIcon = {
             Icon(
                 Icons.Filled.Email,
-                contentDescription = ResourceProvider(StringResourceEnum.EMAIL),
+                contentDescription = "Email",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
         },
@@ -50,7 +47,7 @@ private fun EmailLogin(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navCont
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     GenericInputTextFieldWithTrailingIcon(
         validationResult = state.passwordError,
-        indicatorString = ResourceProvider(StringResourceEnum.PASSWORD),
+        indicatorString = "Password",
         leadingIcon = {
             Icon(
                 Icons.Filled.Lock,
@@ -75,7 +72,7 @@ private fun EmailLogin(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navCont
         valueChangeOperation = {onEvent(AuthEvent.updateEnteredPassword(it))}
     )
     GenericSubmitButton(
-        text = ResourceProvider(StringResourceEnum.LOGIN),
+        text = "Login",
         onEvent = onEvent,
         state = state,
         type = AuthTypeEnum.LOGIN_WITH_EMAIL,
@@ -86,14 +83,7 @@ private fun EmailLogin(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navCont
         onEvent = onEvent,
         state = state,
         icon = Icons.Filled.Email,
-        text = ResourceProvider(StringResourceEnum.REGISTER_W_EMAIL)
-    )
-    SwitchAuthType(
-        newType = AuthTypeEnum.LOGIN_WITH_PHONE,
-        onEvent = onEvent,
-        state = state,
-        icon = Icons.Filled.PhoneAndroid,
-        text = ResourceProvider(StringResourceEnum.LOGIN_W_PHONE)
+        text = "Email"
     )
 }
 
@@ -101,11 +91,11 @@ private fun EmailLogin(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navCont
 private fun EmailRegister(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navController: NavController) {
     GenericInputTextField(
         validationResult = state.emailError,
-        indicatorString = ResourceProvider(StringResourceEnum.EMAIL),
+        indicatorString = "Email",
         leadingIcon = {
             Icon(
                 Icons.Filled.Email,
-                contentDescription = ResourceProvider(StringResourceEnum.EMAIL),
+                contentDescription = "Email",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
         },
@@ -119,7 +109,7 @@ private fun EmailRegister(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navC
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
     GenericInputTextFieldWithTrailingIcon(
         validationResult = state.passwordError,
-        indicatorString = ResourceProvider(StringResourceEnum.PASSWORD),
+        indicatorString = "Password",
         leadingIcon = {
             Icon(
                 Icons.Filled.Lock,
@@ -145,7 +135,7 @@ private fun EmailRegister(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navC
     )
 
     GenericSubmitButton(
-        text = ResourceProvider(StringResourceEnum.REGISTER),
+        text = "Register",
         onEvent = onEvent,
         state = state,
         type = AuthTypeEnum.REGISTER_WITH_EMAIL,
@@ -156,14 +146,7 @@ private fun EmailRegister(onEvent: (AuthEvent) -> Unit, state: AuthUiState, navC
         onEvent = onEvent,
         state = state,
         icon = Icons.Filled.Email,
-        text = ResourceProvider(StringResourceEnum.LOGIN_W_EMAIL)
-    )
-    SwitchAuthType(
-        newType = AuthTypeEnum.LOGIN_WITH_PHONE,
-        onEvent = onEvent,
-        state = state,
-        icon = Icons.Filled.PhoneAndroid,
-        text = ResourceProvider(StringResourceEnum.LOGIN_W_PHONE)
+        text = "Login with email"
     )
 }
 

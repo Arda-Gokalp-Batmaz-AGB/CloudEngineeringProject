@@ -1,4 +1,4 @@
-package com.arda.dystherapy.components.popups.clasic_popups
+package com.arda.core_ui.components.popups.clasic_popups
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,8 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.arda.dystherapy.util.ResourceProvider
-import com.arda.dystherapy.validation.StringResourceEnum
 
 @Composable
 fun FullPagePopUpWrapper(
@@ -85,7 +83,7 @@ private fun TopBarWithCancel(setShowDialog: (Boolean) -> Unit){
         Spacer(Modifier.weight(1f))
         Text(
             modifier = Modifier,//.weight(1f)
-            text = ResourceProvider(StringResourceEnum.SUPPORT), //"Account",//settingNavItem.title,
+            text = "Support", //"Account",//settingNavItem.title,
             style = MaterialTheme.typography.headlineLarge
         )
         Spacer(Modifier.weight(1f))

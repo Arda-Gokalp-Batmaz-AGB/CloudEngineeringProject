@@ -1,9 +1,9 @@
-package com.arda.dystherapy.utils
+package com.arda.core_ui.utils
 
 import android.content.Context
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.arda.dystherapy.core.R
+import com.arda.auth_ui.R
 import java.io.File
 
 class ComposeFileProviderUtils : FileProvider(

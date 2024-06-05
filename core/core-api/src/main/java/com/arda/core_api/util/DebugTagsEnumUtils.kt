@@ -1,4 +1,4 @@
-package com.arda.dystherapy.util
+package com.arda.core_api.util
 
 enum class DebugTagsEnumUtils(val tag: String) {
     UITag("UITag"),

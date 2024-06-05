@@ -1,4 +1,4 @@
-package com.arda.dystherapy.utils
+package com.arda.core_ui.utils
 
 import android.content.Context
 import android.graphics.Bitmap

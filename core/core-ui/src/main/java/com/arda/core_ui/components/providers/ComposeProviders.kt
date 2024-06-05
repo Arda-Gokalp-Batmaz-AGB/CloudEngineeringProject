@@ -1,4 +1,4 @@
-package com.arda.dystherapy.components.providers
+package com.arda.core_ui.components.providers
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.arda.dystherapy.components
+package com.arda.core_ui.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalConfiguration

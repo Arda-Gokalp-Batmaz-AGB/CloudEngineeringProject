@@ -17,7 +17,6 @@ object Dependencies {
     const val hiltNav = "androidx.hilt:hilt-navigation-compose:${Versions.hiltNav}"
     const val composeNav = "androidx.navigation:navigation-compose:${Versions.composeNav}"
     const val konfetiCompose = "nl.dionsegijn:konfetti-compose:${Versions.konfetiCompose}"
-    const val zoomCompose = "com.github.SmartToolFactory:Compose-Zoom:${Versions.zoomCompose}"
     const val swipeRefCompose = "com.google.accompanist:accompanist-swiperefresh:${Versions.swipeCompose}"
 
     const val appCompat = "androidx.appcompat:appcompat:${Versions.appCompat}"
@@ -155,7 +154,6 @@ fun DependencyHandler.compose() {
     implementation(Dependencies.composeNav)
     implementation(Dependencies.hiltNav)
     implementation(Dependencies.konfetiCompose)
-    implementation(Dependencies.zoomCompose)
     implementation(Dependencies.swipeRefCompose)
     debugImplementation(Dependencies.composeUiToolingPreview)
     debugImplementation(Dependencies.composeUiTooling)

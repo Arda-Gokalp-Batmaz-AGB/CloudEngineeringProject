@@ -1,4 +1,4 @@
-package com.arda.dystherapy.ui.auth
+package com.arda.auth_ui.auth
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -38,14 +38,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.arda.auth_ui.auth.AuthEvent
-import com.arda.dystherapy.auth.R
-import com.arda.dystherapy.model.AuthTypeEnum
-import com.arda.dystherapy.nav.NavItem
-import com.arda.dystherapy.util.DebugTagsEnumUtils
-import com.arda.dystherapy.util.Resource
-import com.arda.dystherapy.util.ResourceProvider
-import com.arda.dystherapy.validation.StringResourceEnum
+import com.arda.auth.auth_api.model.AuthTypeEnum
+import com.arda.core_api.util.DebugTagsEnumUtils
+import com.arda.core_api.util.Resource
+import com.arda.core_ui.nav.NavItem
 
 private val TAG = DebugTagsEnumUtils.UITag.tag
 
@@ -93,8 +89,6 @@ fun AuthLogic(
     val currentAuthScreenState by rememberUpdatedState(newValue = state.currentAuthScreenState)
     if (currentAuthScreenState == AuthTypeEnum.LOGIN_WITH_EMAIL || currentAuthScreenState == AuthTypeEnum.REGISTER_WITH_EMAIL) {
         EmailAuthPage(currentAuthScreenState,onEvent, state,navController)
-    } else if (state.currentAuthScreenState == AuthTypeEnum.LOGIN_WITH_PHONE) {
-        PhoneAuthPage(onEvent, state,navController)
     }
 }
 
@@ -109,13 +103,13 @@ fun ImageLogo() {
         elevation = CardDefaults.cardElevation(5.dp)
     )
     {
-        Image(
-            modifier = Modifier
-                .fillMaxSize(),
-            painter = painterResource(R.drawable.splash_icon),
-            contentScale = ContentScale.Crop,
-            contentDescription = "Logo"
-        )
+//        Image(
+//            modifier = Modifier
+//                .fillMaxSize(),
+//            painter = painterResource(),
+//            contentScale = ContentScale.Crop,
+//            contentDescription = "Logo"
+//        )
     }
 
 }
@@ -177,7 +171,6 @@ fun GenericSubmitButton(
 
             when(type){
                 AuthTypeEnum.LOGIN_WITH_EMAIL ->  onEvent(AuthEvent.login)
-                AuthTypeEnum.LOGIN_WITH_PHONE ->  onEvent(AuthEvent.login)
                 AuthTypeEnum.REGISTER_WITH_EMAIL -> onEvent(AuthEvent.register)
                 else -> {return@Button}
             }
@@ -232,14 +225,14 @@ fun GenericSubmitButton(
                     onEvent(AuthEvent.setSubmitButton(true))
                     Toast.makeText(
                         mContext,
-                        ResourceProvider(StringResourceEnum.LOGIN_SUCCESS),
+                        "Login Sucess",
                         Toast.LENGTH_LONG
                     ).show()
                     Log.v(DebugTagsEnumUtils.UITag.tag, "LOGIN SUCESS! ROUTE TO HOME")
                     onEvent(AuthEvent.clearState)
 //                    loggedCheckViewModel.callInit()
-                    navController.navigate(NavItem.WaitScreen.route){
-                        popUpTo(NavItem.WaitScreen.route)
+                    navController.navigate(NavItem.Home.route){
+                        popUpTo(NavItem.Home.route)
                     }
                 }
 

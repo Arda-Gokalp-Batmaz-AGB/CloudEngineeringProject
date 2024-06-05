@@ -1,9 +1,9 @@
-package com.arda.dystherapy.ui.auth
+package com.arda.auth_ui.auth
 
-import com.arda.dystherapy.domain.model.MinimizedUser
-import com.arda.dystherapy.model.AuthTypeEnum
-import com.arda.dystherapy.util.Resource
-import com.arda.dystherapy.validation.ValidationResult
+import com.arda.auth.auth_api.model.AuthTypeEnum
+import com.arda.core_api.domain.model.MinimizedUser
+import com.arda.core_api.util.Resource
+import com.arda.core_api.validation.ValidationResult
 import java.lang.Exception
 
 data class AuthUiState (

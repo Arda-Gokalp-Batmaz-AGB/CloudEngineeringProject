@@ -1,4 +1,4 @@
-package com.arda.dystherapy.theme
+package com.arda.core_ui.theme
 
 import androidx.compose.ui.graphics.Color
 

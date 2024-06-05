@@ -3,8 +3,8 @@ package com.arda.auth_impl.auth.data.repository
 import android.util.Log
 import com.arda.auth_impl.auth.util.await
 import com.arda.core_api.domain.model.MinimizedUser
+import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_api.util.Resource
-import com.arda.dystherapy.util.DebugTagsEnumUtils
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential

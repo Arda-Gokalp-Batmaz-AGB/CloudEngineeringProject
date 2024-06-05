@@ -1,4 +1,4 @@
-package com.arda.dystherapy.domain.enums
+package com.arda.core_api.domain.enums
 
 import kotlinx.serialization.Serializable
 

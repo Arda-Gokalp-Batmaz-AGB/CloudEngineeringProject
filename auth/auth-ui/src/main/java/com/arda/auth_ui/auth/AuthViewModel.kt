@@ -1,4 +1,4 @@
-package com.arda.dystherapy.ui.auth
+package com.arda.auth_ui.auth
 
 import android.app.Activity
 import android.content.Context
@@ -8,18 +8,15 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arda.auth_ui.auth.AuthEvent
-import com.arda.dystherapy.components.country_code_picker.getListOfCountries
-import com.arda.dystherapy.domain.model.MinimizedUser
-import com.arda.dystherapy.domain.usecase.GetMinimizedUserUseCase
-import com.arda.dystherapy.model.AuthTypeEnum
-import com.arda.dystherapy.usecase.GetPhoneVerifyCodeUseCase
-import com.arda.dystherapy.usecase.LoginUseCase
-import com.arda.dystherapy.usecase.RegisterUseCase
-import com.arda.dystherapy.util.DebugTagsEnumUtils
-import com.arda.dystherapy.util.Resource
-import com.arda.dystherapy.validation.ValidationResult
-import com.arda.dystherapy.validation.ValidationResultEnum
+import com.arda.auth.auth_api.model.AuthTypeEnum
+import com.arda.auth.auth_api.usecase.LoginUseCase
+import com.arda.auth.auth_api.usecase.RegisterUseCase
+import com.arda.core_api.domain.model.MinimizedUser
+import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
+import com.arda.core_api.util.DebugTagsEnumUtils
+import com.arda.core_api.util.Resource
+import com.arda.core_api.validation.ValidationResult
+import com.arda.core_api.validation.ValidationResultEnum
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,12 +30,8 @@ import javax.inject.Inject
 class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
-    private val getPhoneVerifyCodeUseCase: GetPhoneVerifyCodeUseCase,
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase
 ) : ViewModel(), LifecycleObserver {
-    val verifyButtonTimer = CountTimeViewModel
-
-
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState: StateFlow<AuthUiState> = _uiState.asStateFlow()
 
@@ -61,12 +54,10 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.changeAuthScreenState -> changeAuthScreenState(event.newState)
             AuthEvent.clearErrors -> clearErrors()
             AuthEvent.clearState -> clearState()
-            is AuthEvent.getVerifyCode -> getVerifyCode(event.activity)
             is AuthEvent.handleBackendErrors -> handleBackendErrors(event.exception)
             is AuthEvent.handleUIErrors -> handleUIErrors(event.validationResultList)
             AuthEvent.login -> login()
             AuthEvent.register -> register()
-            is AuthEvent.setCountryCodeAndNumber -> setCountryCodeAndNumber(event.countryCode,event.countryPhoneCode)
             is AuthEvent.setSubmitButton -> setSubmitButton(event.value)
             is AuthEvent.updateEnteredEmail -> updateEnteredEmail(event.enteredValue)
             is AuthEvent.updateEnteredPassword -> updateEnteredPassword(event.enteredValue)
@@ -113,51 +104,6 @@ class AuthViewModel @Inject constructor(
             it.copy(authFlow = result)
         }
         Log.v(TAG, result.toString())
-    }
-
-    fun getVerifyCode(activity: Activity?) {
-        CountTimeViewModel.startTimer()
-        getPhoneVerifyCodeUseCase(
-            phone = uiState.value.selectedCountryNumber + uiState.value.enteredPhoneNumber,
-            //activity = activity
-        )
-    }
-
-    fun setCountryCodeAndNumber(countryCode: String, countryPhoneCode: String) {
-        _uiState.update {
-            it.copy(
-                selectedCountryCode = countryCode,
-                selectedCountryNumber = getListOfCountries().single { it.countryCode == countryCode }.countryPhoneCode
-            )
-        }
-    }
-
-    fun findCountryCodeOfUser(activity: Activity) {
-        val tm = activity.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-        val countryCodeValue = tm.networkCountryIso
-        if (countryCodeValue != null && countryCodeValue != "") {
-            _uiState.update {
-                it.copy(
-                    selectedCountryCode = countryCodeValue,
-                    selectedCountryNumber = getListOfCountries().single { it.countryCode == countryCodeValue }.countryPhoneCode
-                )
-            }
-        } else {
-            _uiState.update {
-                it.copy(
-                    selectedCountryCode = "gb",
-                    selectedCountryNumber = "44"
-                )
-            }
-        }
-        Log.v(TAG, "Default CountryCode " + uiState.value.selectedCountryCode)
-        Log.v(TAG, "Default CountryNumber " + uiState.value.selectedCountryNumber)
-    }
-
-    fun googleLogin(intent: Intent) = viewModelScope.launch {
-        _uiState.update {
-            it.copy(authFlow = Resource.Loading)
-        }
     }
 
     fun updateEnteredPassword(enteredValue: String) {

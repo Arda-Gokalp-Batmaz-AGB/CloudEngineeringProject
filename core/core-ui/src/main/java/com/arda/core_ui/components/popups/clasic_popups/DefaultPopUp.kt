@@ -1,4 +1,4 @@
-package com.arda.dystherapy.components.popups.clasic_popups
+package com.arda.core_ui.components.popups.clasic_popups
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import com.arda.dystherapy.components.SpecialText
 
 @Composable
 fun DefaultPopUp(
@@ -62,7 +62,7 @@ private fun TopBarPopUp(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        com.arda.dystherapy.components.SpecialText(
+        Text(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
@@ -108,7 +108,7 @@ private fun BodyPopUp(
 ) {
     Card()
     {
-        com.arda.dystherapy.components.SpecialText(text = text)
+        Text(text = text)
     }
 }
 
@@ -130,10 +130,10 @@ private fun ButtonPart(
                     setShowDialog(false)
                     confirmationCode.invoke()
                 }) {
-                    com.arda.dystherapy.components.SpecialText(text = "Yes")
+                    Text(text = "Yes")
                 }
                 Button(onClick = { setShowDialog(false) }) {
-                    com.arda.dystherapy.components.SpecialText(text = "No")
+                    Text(text = "No")
                 }
             }
 
@@ -142,7 +142,7 @@ private fun ButtonPart(
                     setShowDialog(false)
                     confirmationCode.invoke()
                 }) {
-                    com.arda.dystherapy.components.SpecialText(text = "OK")
+                    Text(text = "OK")
                 }
             }
         }

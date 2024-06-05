@@ -1,12 +1,9 @@
-package com.arda.dystherapy.components.snackbar
+package com.arda.core_ui.components.snackbar
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,27 +17,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.arda.dystherapy.components.SpecialText
-import com.arda.dystherapy.components.providers.LocalSnackbarHostState
-import com.arda.dystherapy.components.userDiffChars
-import com.arda.dystherapy.core.R
-import com.arda.dystherapy.theme.DystherapyPREVIEWTheme
-import com.arda.dystherapy.theme.Theme
-import com.arda.dystherapy.util.ResourceProvider
-import com.arda.dystherapy.validation.StringResourceEnum
+import com.arda.core_ui.components.providers.LocalSnackbarHostState
+import com.arda.core_ui.theme.ProjectTheme
 
 @Composable
 fun SnackBarShowcase(receivedSnackbarData: SnackbarData) {
@@ -51,7 +39,7 @@ fun SnackBarShowcase(receivedSnackbarData: SnackbarData) {
             .clickable {
                 snackbarHostState.currentSnackbarData?.dismiss()
 
-                       },
+            },
         contentAlignment = Alignment.Center,
     )
     {
@@ -71,21 +59,6 @@ fun SnackBarShowcase(receivedSnackbarData: SnackbarData) {
                 receivedSnackbarData.message,
                 snackbarHostState
             )
-
-            SnackBarTypeEnum.QUESTION_CORRECT -> Question_Correct_Snackbar(
-                receivedSnackbarData.message,
-                snackbarHostState
-            )
-
-            SnackBarTypeEnum.QUESTION_WRONG -> Question_Wrong_Snackbar(
-                receivedSnackbarData.message,
-                snackbarHostState
-            )
-
-            SnackBarTypeEnum.QUESTIONS_FINISHED -> Question_Finished_Snackbar(
-                receivedSnackbarData.message,
-                snackbarHostState
-            )
         }
     }
 
@@ -96,7 +69,7 @@ private fun Operation_Sucess_Snackbar(message: String, snackbarHostState: Snackb
     GenericQuestionSituationSnackbar(
         modifier = Modifier,
         backgroundColor = Color(0xFF00897B),
-        buttonText = ResourceProvider(StringResourceEnum.TAP_TO_CONTINUE_TEXT),
+        buttonText = "Operation Sucess",
         message = message,
         snackbarHostState = snackbarHostState
     )
@@ -108,46 +81,19 @@ private fun Operation_Error_Snackbar(message: String, snackbarHostState: Snackba
         modifier = Modifier,
         backgroundColor = Color.Red,
         message = message,
-        buttonText = ResourceProvider(StringResourceEnum.GIVE_IT_ANOTHER_GO_TEXT),
+        buttonText = "An error occured",
         snackbarHostState = snackbarHostState
     )
 }
 
 @Composable
-private fun Question_Correct_Snackbar(message: String, snackbarHostState: SnackbarHostState) {
-    GenericQuestionSituationSnackbar(
-        modifier = Modifier,
-        backgroundColor = Color(0xFF00897B),
-        message = message,
-        buttonText = ResourceProvider(StringResourceEnum.TAP_TO_CONTINUE_TEXT),
-        snackbarHostState = snackbarHostState
-    )
-}
-@Composable
-private fun Question_Wrong_Snackbar(message: String, snackbarHostState: SnackbarHostState) {
-    GenericQuestionSituationSnackbar(
-        modifier = Modifier,
-        backgroundColor = Color(0xFFEB385B),
-        message = message,
-        buttonText = ResourceProvider(StringResourceEnum.GIVE_IT_ANOTHER_GO_TEXT),
-        snackbarHostState = snackbarHostState
-    )
-}
-
-@Composable
-private fun Question_Finished_Snackbar(message: String, snackbarHostState: SnackbarHostState) {
-    GenericQuestionSituationSnackbar(
-        modifier = Modifier,
-        backgroundColor = Color(0xFF00897B),
-        message = message,
-        buttonText = ResourceProvider(StringResourceEnum.TAP_TO_GO_BACK_TEXT),
-        snackbarHostState = snackbarHostState
-    )
-}
-
-
-@Composable
-private fun GenericQuestionSituationSnackbar(modifier: Modifier = Modifier, backgroundColor : Color,message: String, buttonText : String,snackbarHostState: SnackbarHostState){
+private fun GenericQuestionSituationSnackbar(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color,
+    message: String,
+    buttonText: String,
+    snackbarHostState: SnackbarHostState,
+) {
     Snackbar(
         modifier = modifier
             .padding(12.dp)
@@ -157,26 +103,13 @@ private fun GenericQuestionSituationSnackbar(modifier: Modifier = Modifier, back
         action = {
         }
     ) {
-        Box(contentAlignment = Alignment.TopCenter){
-            Image(
-                modifier = Modifier.fillMaxWidth(0.2f).aspectRatio(1f).align(Alignment.TopStart)
-                    .graphicsLayer {
-                        // This scales the X dimension to -1, flipping the image horizontally
-                        scaleX = -1f
-                    },
-                painter = painterResource(R.drawable.ballon_assest),
-                contentScale = ContentScale.Fit,
-                contentDescription = "bg"
-            )
-            Image(
-                modifier = Modifier.fillMaxWidth(0.2f).aspectRatio(1f).align(Alignment.TopEnd),
-                painter = painterResource(R.drawable.ballon_assest),
-                contentScale = ContentScale.Fit,
-                contentDescription = "bg"
-            )
-            Column(modifier = Modifier.fillMaxWidth(1f),horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(contentAlignment = Alignment.TopCenter) {
+            Column(
+                modifier = Modifier.fillMaxWidth(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Row() {
-                    SpecialText(message)
+                    Text(message)
                     Icon(
                         imageVector = Icons.Filled.Star,
                         "volumeup",
@@ -193,27 +126,26 @@ private fun GenericQuestionSituationSnackbar(modifier: Modifier = Modifier, back
                     onClick = {
                         snackbarHostState.currentSnackbarData?.dismiss()
                     }) {
-                    SpecialText(buttonText)
+                    Text(buttonText)
                 }
             }
         }
 
     }
 }
+
 @Composable
 @Preview(device = "spec:parent=pixel_5,orientation=landscape")
 fun PreviewSnackBarShowcase() {
     val snackbarHostState = remember { SnackbarHostState() }
     CompositionLocalProvider(LocalSnackbarHostState provides snackbarHostState) {
-        CompositionLocalProvider(userDiffChars provides listOf('b', 'p')) {
-            DystherapyPREVIEWTheme(theme = Theme.CHILD_THEME) {
-                SnackBarShowcase(
-                    receivedSnackbarData = SnackbarData(
-                        message = "ancillae",
-                        snackBarTypeEnum = SnackBarTypeEnum.QUESTION_CORRECT
-                    )
+        ProjectTheme() {
+            SnackBarShowcase(
+                receivedSnackbarData = SnackbarData(
+                    message = "ancillae",
+                    snackBarTypeEnum = SnackBarTypeEnum.OPERATION_SUCESS
                 )
-            }
+            )
         }
     }
 
