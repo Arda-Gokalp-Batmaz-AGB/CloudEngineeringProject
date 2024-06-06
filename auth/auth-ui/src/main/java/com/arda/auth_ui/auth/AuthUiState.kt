@@ -1,6 +1,7 @@
 package com.arda.auth_ui.auth
 
 import com.arda.auth.auth_api.model.AuthTypeEnum
+import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.util.Resource
 import com.arda.core_api.validation.ValidationResult
@@ -15,6 +16,7 @@ data class AuthUiState (
     val selectedCountryCode  : String = "gb",
     val selectedCountryNumber : String = "+44",
 
+    val selectedRole : String = RoleEnum.user.toString(),
     val submitButtonOn  : Boolean = true,
     val authFlow: Resource<MinimizedUser>? = null,
 

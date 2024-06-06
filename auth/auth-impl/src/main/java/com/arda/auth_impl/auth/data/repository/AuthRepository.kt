@@ -6,7 +6,7 @@ import com.arda.core_api.util.Resource
 interface AuthRepository {
     val currentUser: MinimizedUser?
     suspend fun emailLogin(email: String, password: String): Resource<MinimizedUser>
-    suspend fun emailRegister(email: String, password: String): Resource<MinimizedUser>
+    suspend fun emailRegister(email: String, role: String,password: String): Resource<MinimizedUser>
     suspend fun phoneLogin(verifyCode: String): Resource<MinimizedUser>
     fun getVerifyCode(phone: String)
     fun logout()

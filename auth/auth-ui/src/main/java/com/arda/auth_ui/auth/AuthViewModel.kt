@@ -11,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.arda.auth.auth_api.model.AuthTypeEnum
 import com.arda.auth.auth_api.usecase.LoginUseCase
 import com.arda.auth.auth_api.usecase.RegisterUseCase
+import com.arda.core_api.domain.enums.OfficierSubRoleEnum
+import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
 import com.arda.core_api.util.DebugTagsEnumUtils
@@ -95,6 +97,7 @@ class AuthViewModel @Inject constructor(
             it.copy(authFlow = Resource.Loading)
         }
         val result = registerUseCase(
+            role = RoleEnum.user.toString(), //OfficierSubRoleEnum
             email = uiState.value.enteredEmail,
             password = uiState.value.enteredPassword,
             authType = uiState.value.currentAuthScreenState

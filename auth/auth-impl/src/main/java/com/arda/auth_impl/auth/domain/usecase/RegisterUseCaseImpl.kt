@@ -1,26 +1,26 @@
 package com.arda.auth_impl.auth.domain.usecase
 
-import com.arda.auth_impl.auth.data.repository.AuthRepository
-import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.auth.auth_api.model.AuthTypeEnum
 import com.arda.auth.auth_api.usecase.RegisterUseCase
+import com.arda.auth_impl.auth.data.repository.AuthRepository
+import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.util.Resource
 import com.arda.core_api.validation.ValidationUtil
 import com.google.firebase.auth.FirebaseUser
-import java.lang.Exception
 import javax.inject.Inject
 
 class RegisterUseCaseImpl @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : RegisterUseCase {
     override suspend operator fun invoke(
+        role: String,
         email: String,
         password: String,
-        authType: AuthTypeEnum
+        authType: AuthTypeEnum,
     ): Resource<MinimizedUser> {
         var result: Resource<MinimizedUser>
         if (authType == AuthTypeEnum.REGISTER_WITH_EMAIL) {
-            result = emailRegister(email = email, password = password)
+            result = emailRegister(email = email, role = role, password = password)
         } else {
             result =
                 Resource.Failure<MinimizedUser>(
@@ -31,7 +31,11 @@ class RegisterUseCaseImpl @Inject constructor(
     }
 
 
-    private suspend fun emailRegister(email: String, password: String): Resource<MinimizedUser> {
+    private suspend fun emailRegister(
+        email: String,
+        role: String,
+        password: String,
+    ): Resource<MinimizedUser> {
         //EMAİL VALIDATE
         val validationErrorsList = arrayListOf<Exception>()
 
@@ -43,7 +47,7 @@ class RegisterUseCaseImpl @Inject constructor(
             validationErrorsList.add(emailValidationResult.exception)
 
         if (validationErrorsList.size == 0) {
-            return authRepository.emailRegister(email, password)
+            return authRepository.emailRegister(email = email, role = role, password = password)
         }
         return Resource.Failure<FirebaseUser>(
             exceptionList = validationErrorsList

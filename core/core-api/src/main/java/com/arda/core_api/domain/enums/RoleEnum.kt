@@ -13,6 +13,10 @@ enum class OfficierSubRoleEnum {
     gardener,
     cleaner,
 }
+fun getAllRolesExcludingOfficer(): List<String> {
+    val result = RoleEnum.values().filter { it != RoleEnum.officer } + OfficierSubRoleEnum.values()
+    return result.map { x-> x.toString() }
+}
 
 sealed class Role {
     abstract val userName: String

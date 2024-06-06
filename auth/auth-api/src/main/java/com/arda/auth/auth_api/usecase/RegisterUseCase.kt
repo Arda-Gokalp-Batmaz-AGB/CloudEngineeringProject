@@ -6,6 +6,7 @@ import com.arda.core_api.util.Resource
 
 interface RegisterUseCase {
     suspend operator fun invoke(
+        role : String,
         email: String = "",
         password: String = "",
         authType: AuthTypeEnum

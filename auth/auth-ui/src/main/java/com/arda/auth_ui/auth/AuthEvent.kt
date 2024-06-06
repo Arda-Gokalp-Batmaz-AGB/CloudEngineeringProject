@@ -14,6 +14,7 @@ sealed class AuthEvent {
     data class handleBackendErrors(val exception: Exception) : AuthEvent()
     data class setSubmitButton(val value: Boolean, ) : AuthEvent()
     data class validateErrors(val exception: Exception) : AuthEvent()
+    data class setRole(val role : String) : AuthEvent()
     object clearErrors : AuthEvent()
     object clearState : AuthEvent()
 }

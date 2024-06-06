@@ -189,3 +189,12 @@ fun DependencyHandler.caseApi() {
 fun DependencyHandler.caseImpl() {
     implementation(project(":case:case-impl"))
 }
+fun DependencyHandler.profileUi() {
+    implementation(project(":profile:profile-ui"))
+}
+fun DependencyHandler.profileApi() {
+    implementation(project(":profile:profile-api"))
+}
+fun DependencyHandler.profileImpl() {
+    implementation(project(":profile:profile-impl"))
+}

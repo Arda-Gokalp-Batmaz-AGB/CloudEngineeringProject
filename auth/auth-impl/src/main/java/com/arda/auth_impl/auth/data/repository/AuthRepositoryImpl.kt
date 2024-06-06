@@ -2,6 +2,7 @@ package com.arda.auth_impl.auth.data.repository
 
 import android.util.Log
 import com.arda.auth_impl.auth.util.await
+import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_api.util.Resource
@@ -56,14 +57,14 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun emailRegister(email: String, password: String): Resource<MinimizedUser> =
+    override suspend fun emailRegister(email: String, role: String,password: String): Resource<MinimizedUser> =
         withContext(
             dispatcher
         ) {
             return@withContext try {
                 val result = auth.createUserWithEmailAndPassword(email, password).await()
                 result?.user?.updateProfile(
-                    UserProfileChangeRequest.Builder().setDisplayName(email)..build()
+                    UserProfileChangeRequest.Builder().setDisplayName(role).build()
                 )?.await()
 
                 Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid) })

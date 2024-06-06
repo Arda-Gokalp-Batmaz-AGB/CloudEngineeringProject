@@ -69,8 +69,15 @@ dependencies {
     authApi()
     authImpl()
     authUi()
+    profileApi()
+    profileUi()
+    profileImpl()
+    caseApi()
+    caseUi()
+    caseImpl()
     coreApi()
     coreUi()
+
 
     compose()
     coil()
