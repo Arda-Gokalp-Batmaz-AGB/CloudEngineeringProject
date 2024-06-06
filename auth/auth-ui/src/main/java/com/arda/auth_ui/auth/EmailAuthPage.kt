@@ -22,9 +22,9 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -195,7 +195,7 @@ fun RoleDropdown(
     state: AuthUiState,
 ) {
     var dropControl by remember { mutableStateOf(false) }
-    var selectIndex by remember { mutableIntStateOf(0) }
+    val selectedRole by rememberUpdatedState(newValue = state.selectedRole)
     val roleList by remember {
         mutableStateOf(getAllRolesExcludingOfficer())
     }
@@ -212,7 +212,7 @@ fun RoleDropdown(
                     dropControl = true
                 }) {
 
-            Text(text = roleList[selectIndex].toString())
+            Text(text = selectedRole)
             Icon(
                 Icons.Filled.ArrowDropDown,
                 contentDescription = ""
@@ -221,12 +221,12 @@ fun RoleDropdown(
         }
         DropdownMenu(expanded = dropControl, onDismissRequest = { dropControl = false }) {
 
-            roleList.forEachIndexed { index, role ->
+            roleList.forEach { role ->
                 DropdownMenuItem(
-                    text = { Text(text = role.toString()) },
+                    text = { Text(text = role) },
                     onClick = {
                         dropControl = false
-                        selectIndex = index
+                        onEvent(AuthEvent.setRole(role = role))
                     })
             }
 

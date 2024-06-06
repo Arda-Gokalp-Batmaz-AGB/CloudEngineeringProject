@@ -66,6 +66,13 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.updateEnteredPhoneNumber -> updateEnteredPhoneNumber(event.enteredValue)
             is AuthEvent.updateEnteredVerifyNumber -> updateEnteredVerifyNumber(event.enteredValue)
             is AuthEvent.validateErrors -> validateErrors(event.exception)
+            is AuthEvent.setRole -> setRole(event.role)
+        }
+    }
+
+    fun setRole(role : String){
+        _uiState.update {
+            it.copy(selectedRole = role)
         }
     }
     fun changeAuthScreenState(newState: AuthTypeEnum) {
@@ -97,7 +104,7 @@ class AuthViewModel @Inject constructor(
             it.copy(authFlow = Resource.Loading)
         }
         val result = registerUseCase(
-            role = RoleEnum.user.toString(), //OfficierSubRoleEnum
+            role = uiState.value.selectedRole, //OfficierSubRoleEnum
             email = uiState.value.enteredEmail,
             password = uiState.value.enteredPassword,
             authType = uiState.value.currentAuthScreenState
