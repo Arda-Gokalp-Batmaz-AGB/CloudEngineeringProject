@@ -231,8 +231,8 @@ fun GenericSubmitButton(
                     Log.v(DebugTagsEnumUtils.UITag.tag, "LOGIN SUCESS! ROUTE TO HOME")
                     onEvent(AuthEvent.clearState)
 //                    loggedCheckViewModel.callInit()
-                    navController.navigate(NavItem.Home.route){
-                        popUpTo(NavItem.Home.route)
+                    navController.navigate(NavItem.WaitScreen.route){
+                        popUpTo(NavItem.WaitScreen.route)
                     }
                 }
 

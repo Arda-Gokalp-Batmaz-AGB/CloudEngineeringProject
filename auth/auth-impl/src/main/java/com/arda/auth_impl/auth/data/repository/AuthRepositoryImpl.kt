@@ -63,7 +63,7 @@ class AuthRepositoryImpl @Inject constructor(
             return@withContext try {
                 val result = auth.createUserWithEmailAndPassword(email, password).await()
                 result?.user?.updateProfile(
-                    UserProfileChangeRequest.Builder().setDisplayName(email).build()
+                    UserProfileChangeRequest.Builder().setDisplayName(email)..build()
                 )?.await()
 
                 Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid) })

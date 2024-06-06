@@ -180,3 +180,12 @@ fun DependencyHandler.authApi() {
 fun DependencyHandler.authUi() {
     implementation(project(":auth:auth-ui"))
 }
+fun DependencyHandler.caseUi() {
+    implementation(project(":case:case-ui"))
+}
+fun DependencyHandler.caseApi() {
+    implementation(project(":case:case-api"))
+}
+fun DependencyHandler.caseImpl() {
+    implementation(project(":case:case-impl"))
+}
