@@ -42,6 +42,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.arda.auth_ui.auth.AuthScreen
 import com.arda.auth_ui.auth.AuthViewModel
+import com.arda.case_ui.screens.userhome.UserHome
+import com.arda.case_ui.screens.userhome.UserHomeViewModel
 import com.arda.cloudengineeringproject.core.waitscreen.WaitScreen
 import com.arda.cloudengineeringproject.core.waitscreen.WaitScreenViewModel
 import com.arda.core_api.util.DebugTagsEnumUtils
@@ -77,12 +79,12 @@ fun NavGraph(
             val state by authViewModel.uiState.collectAsState()
             AuthScreen(authViewModel::onEvent, state, navController)
         }
-//        Parentcomposable(route = NavItem.Home.route, navController = navController)
-//        {
-//            val parentHomeViewModel = hiltViewModel<ParentHomeViewModel>()
-//            val state by parentHomeViewModel.uiState.collectAsState()
-//            ParentHome(state, navController)
-//        }
+        Parentcomposable(route = NavItem.Home.route, navController = navController)
+        {
+            val userHomeViewModel = hiltViewModel<UserHomeViewModel>()
+            val state by userHomeViewModel.uiState.collectAsState()
+            UserHome(userHomeViewModel::onEvent,state, navController)
+        }
     }
 }
 
@@ -153,7 +155,7 @@ fun NavGraphBuilder.Parentcomposable(
                 modifier = Modifier,//.windowInsetsPadding(WindowInsets.displayCutout).windowInsetsPadding(WindowInsets.safeDrawing)
                 bottomBar = {
                     val keyboardIsVisible by rememberUpdatedState(newValue = WindowInsets.isImeVisible)//daha efektif bir yol olabilir
-                    Log.v(TAG, "Keybord:${keyboardIsVisible}")
+                    Log.v(TAG, "Keybord:${keyboardIsVisible} and route =$route")
                     if (!keyboardIsVisible && route != NavItem.Auth.route)
                         BottomBar(navController = navController)
                 }

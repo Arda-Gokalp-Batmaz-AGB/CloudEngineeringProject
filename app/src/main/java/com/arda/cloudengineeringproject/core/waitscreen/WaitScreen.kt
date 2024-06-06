@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.arda.cloudengineeringproject.R
 import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_ui.nav.NavItem
@@ -36,9 +35,11 @@ fun WaitScreen(
     navController: NavHostController,
     state: WaitScreenUiState,
 ) {
-    Box(modifier = Modifier
-        .fillMaxSize(1f)
-        .background(Color(0xFFEDD1B0))) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(1f)
+            .background(Color(0xFFEDD1B0))
+    ) {
         ConstraintLayout(modifier = Modifier.fillMaxSize(1f)) {
             val (appIcon) = createRefs()
             Image(
@@ -65,39 +66,33 @@ fun WaitScreen(
     val activity = LocalContext.current as Activity
     when (configuration.orientation) {
         Configuration.ORIENTATION_LANDSCAPE -> {
-            Log.v(TAG,"ORIENTED TO LANDSCAPE")
+            Log.v(TAG, "ORIENTED TO LANDSCAPE")
         }
+
         else -> {
-            Log.v(TAG,"ORIENTED TO PORTRAIT")
+            Log.v(TAG, "ORIENTED TO PORTRAIT")
         }
     }
     val navigatedPlace by rememberUpdatedState(newValue = state.navigatedScreen)
-    LaunchedEffect(navigatedPlace,configuration.orientation){
-        Log.v(TAG,"WAIT SCREEN NAV TRIGGERED WITH ${navigatedPlace} and ORIENTATION : ${configuration.orientation}")
-        when(navigatedPlace){
+    LaunchedEffect(navigatedPlace, configuration.orientation) {
+        Log.v(
+            TAG,
+            "WAIT SCREEN NAV TRIGGERED WITH ${navigatedPlace}"
+        )
+        when (navigatedPlace) {
             PossibleNavigations.NAN -> {
 
             }
+
             PossibleNavigations.AUTH_SCREEN -> {
-                if(configuration.orientation == 1)
-                navController.navigate(NavItem.Auth.route){
-                    popUpTo(NavItem.Auth.route)
-                }
-                else
-                {
-                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-                    Log.v(TAG,"ORIENTED IN WAIT")
-                }
-            }
-            PossibleNavigations.HOME_SCREEN -> {
-                if(configuration.orientation == 2)
-                    navController.navigate(NavItem.Home.route){
-                        popUpTo(NavItem.Home.route)
+                    navController.navigate(NavItem.Auth.route) {
+                        popUpTo(NavItem.Auth.route)
                     }
-                else
-                {
-                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                    Log.v(TAG,"ORIENTED IN WAIT")
+            }
+
+            PossibleNavigations.HOME_SCREEN -> {
+                navController.navigate(NavItem.Home.route) {
+                    popUpTo(NavItem.Home.route)
                 }
             }
         }

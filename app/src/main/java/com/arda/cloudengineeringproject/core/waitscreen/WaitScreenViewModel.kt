@@ -35,6 +35,9 @@ class WaitScreenViewModel @Inject constructor(
             }
         }
         else{
+            _uiState.update {
+                it.copy(navigatedScreen = PossibleNavigations.HOME_SCREEN)
+            }
 //            getDetailedUserProfile()
         }
 
