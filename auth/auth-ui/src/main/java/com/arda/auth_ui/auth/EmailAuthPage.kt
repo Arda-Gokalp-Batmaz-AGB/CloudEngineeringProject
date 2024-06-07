@@ -233,16 +233,5 @@ fun RoleDropdown(
         }
 
     }
-//    DropdownMenu(expanded = dropControl, onDismissRequest = { dropControl = false }) {
-//
-//        roleList.forEachIndexed { index, role ->
-//            DropdownMenuItem(
-//                text = { Text(text = role.toString()) },
-//                onClick = {
-//                    dropControl = false
-//                    selectIndex = index
-//                })
-//        }
-//
-//    }
+
 }

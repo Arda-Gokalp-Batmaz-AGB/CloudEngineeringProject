@@ -1,6 +1,7 @@
 package com.arda.case_api.domain.model
 
 import com.arda.core_api.domain.enums.OfficierSubRoleEnum
+import com.arda.core_api.domain.enums.RoleEnum
 
 data class Case(
     val id: String,
@@ -22,7 +23,7 @@ enum class CaseProcessEnum(val processName: String) {
     waiting_for_response("Waiting for response")
 }
 enum class CategoryEnum(val categoryName : String){
-    empty(""),
+    empty("Select a category"),
     gardening("Gardening"),
     electric("Electricity"),
     cleaning("Cleaning"),
@@ -30,4 +31,8 @@ enum class CategoryEnum(val categoryName : String){
     office_suplies("Office Suplies"),
     lighting("Lighting"),
     other("Other"),
+}
+fun getAllCaseCategories(): List<String> {
+    val result = CategoryEnum.values().filter { x-> x != CategoryEnum.empty }
+    return result.map { x-> x.categoryName.toString() }
 }
