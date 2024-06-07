@@ -26,11 +26,11 @@ class UserHomeViewModel @Inject constructor(
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase,
     private val getCaseListByUserID: GetCaseListByUserID,
 ) : ViewModel(), LifecycleObserver {
-    private val _uiState = MutableStateFlow(UserHomeUiState())
-    val uiState: StateFlow<UserHomeUiState> = _uiState.asStateFlow()
-
     private val currentUser: MinimizedUser?
         get() = getMinimizedUserUseCase()
+    private val _uiState = MutableStateFlow(UserHomeUiState(currentUser=currentUser))
+    val uiState: StateFlow<UserHomeUiState> = _uiState.asStateFlow()
+
 
     private val TAG = DebugTagsEnumUtils.UITag.tag
 

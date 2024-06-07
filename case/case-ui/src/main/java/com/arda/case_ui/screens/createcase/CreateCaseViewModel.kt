@@ -30,11 +30,11 @@ class CreateCaseViewModel @Inject constructor(
     private val addCaseUser: AddCaseUser,
 ) : ViewModel(), LifecycleObserver {
     private val TAG = DebugTagsEnumUtils.UITag.tag
+    private val _uiState = MutableStateFlow(CreateCaseUiState(currentUser=currentUser))
+    val uiState: StateFlow<CreateCaseUiState> = _uiState.asStateFlow()
     private val currentUser: MinimizedUser?
         get() = getMinimizedUserUseCase()
 
-    private val _uiState = MutableStateFlow(CreateCaseUiState())
-    val uiState: StateFlow<CreateCaseUiState> = _uiState.asStateFlow()
     fun onEvent(event: CreateCaseEvent) {
         when (event) {
             is CreateCaseEvent.addImage -> updateTakenImage(event.bitmap)

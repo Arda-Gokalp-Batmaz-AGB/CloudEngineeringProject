@@ -62,6 +62,8 @@ import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_ui.components.SpecialIconButton
 import com.arda.core_ui.nav.NavItem
 import com.arda.core_ui.theme.ProjectTheme
+import com.arda.profile_ui.screens.profile.Profile
+import com.arda.profile_ui.screens.profile.ProfileViewModel
 
 private val TAG = DebugTagsEnumUtils.UITag.tag
 
@@ -102,6 +104,12 @@ fun NavGraph(
             val createCaseViewModel = hiltViewModel<CreateCaseViewModel>()
             val state by createCaseViewModel.uiState.collectAsState()
             CreateCase(createCaseViewModel::onEvent,state, navController)
+        }
+        Parentcomposable(route = NavItem.Profile.route, navController = navController)
+        {
+            val profileViewModel = hiltViewModel<ProfileViewModel>()
+            val state by profileViewModel.uiState.collectAsState()
+            Profile(profileViewModel::onEvent,state, navController)
         }
     }
 }
@@ -217,6 +225,7 @@ fun BottomBar(navController: NavHostController) {
     val screens = listOf(
         NavItem.Home,
         NavItem.NewCase,
+        NavItem.Profile
 //        NavItem.CaseList
     )
     NavigationBar(modifier = Modifier) {//, contentColor = color

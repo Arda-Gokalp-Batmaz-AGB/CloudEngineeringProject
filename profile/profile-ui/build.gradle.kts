@@ -53,6 +53,7 @@ dependencies {
     coreApi()
     coreUi()
     profileApi()
+    authApi()
     hilt()
     compose()
     coil()

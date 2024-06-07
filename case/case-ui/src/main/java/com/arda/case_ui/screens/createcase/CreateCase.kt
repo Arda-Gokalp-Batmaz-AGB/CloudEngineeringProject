@@ -156,12 +156,16 @@ fun CaseFormBody(
                 ) { onEvent(CreateCaseEvent.updateDescription(it)) }
             }
             item {
-                Spacer(modifier = Modifier.fillParentMaxHeight(0.1f))
+                Spacer(modifier = Modifier.fillParentMaxHeight(0.05f))
 
             }
 
             item {
                 submitForm(onEvent = onEvent, navController = navController)
+            }
+            item {
+                Spacer(modifier = Modifier.fillParentMaxHeight(0.02f))
+
             }
         }
     }
