@@ -1,16 +1,22 @@
 package com.arda.case_ui.screens.userhome
 
+import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arda.case_api.domain.usecase.GetCaseListByID
+import com.arda.case_api.domain.usecase.GetCaseListByUserID
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
 import com.arda.core_api.util.DebugTagsEnumUtils
+import com.arda.core_api.util.Resource
+import com.arda.core_api.util.copyOf
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,8 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class UserHomeViewModel @Inject constructor(
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase,
-    private val getCaseListByID: GetCaseListByID,
-) : ViewModel(), LifecycleObserver  {
+    private val getCaseListByUserID: GetCaseListByUserID,
+) : ViewModel(), LifecycleObserver {
     private val _uiState = MutableStateFlow(UserHomeUiState())
     val uiState: StateFlow<UserHomeUiState> = _uiState.asStateFlow()
 
@@ -29,12 +35,12 @@ class UserHomeViewModel @Inject constructor(
     private val TAG = DebugTagsEnumUtils.UITag.tag
 
     init {
-        listCases()
+        listUserCases()
     }
 
     fun onEvent(event: UserHomeEvent) {
         when (event) {
-            UserHomeEvent.listUserCases -> listCases()
+            UserHomeEvent.listUserCases -> listUserCases()
             is UserHomeEvent.selectUserCase -> selectCase(event.caseID)
         }
     }
@@ -45,7 +51,28 @@ class UserHomeViewModel @Inject constructor(
         }
     }
 
-    fun listCases()  = viewModelScope.launch{
-        getCaseListByID
+    fun listUserCases() = viewModelScope.launch {
+        getCaseListByUserID(currentUser!!.uid).collectLatest() {
+            it.onEach { caseList ->
+                when (caseList) {
+                    is Resource.Failure<*> -> Log.v(TAG, "ERROR ON FETCHING CASES")
+                    Resource.Loading -> {
+                        _uiState.update {
+                            it.copy(isLoading = true)
+                        }
+                        Log.v(TAG, "QUESTIONS LOADING")
+                    }
+
+                    is Resource.Sucess -> {
+                        val cases = caseList.result
+                        _uiState.update {
+                            it.copy(caseList = cases.copyOf().toList(), isLoading = false)
+                        }
+                    }
+
+                }
+
+            }.launchIn(viewModelScope)
+        }
     }
 }
