@@ -21,3 +21,11 @@ enum class CaseProcessEnum(val processName: String) {
     failed("Failed"),
     waiting_for_response("Waiting for response")
 }
+enum class CategoryEnum(val categoryName : String){
+    empty(""),
+    electric("Electrical"),
+    trash("Trash"),
+    office_suplies("Office Suplies"),
+    lighting("Lighting"),
+    other("Other"),
+}

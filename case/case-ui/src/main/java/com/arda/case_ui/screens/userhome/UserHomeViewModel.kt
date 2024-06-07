@@ -52,27 +52,42 @@ class UserHomeViewModel @Inject constructor(
     }
 
     fun listUserCases() = viewModelScope.launch {
-        getCaseListByUserID(currentUser!!.uid).collectLatest() {
-            it.onEach { caseList ->
-                when (caseList) {
-                    is Resource.Failure<*> -> Log.v(TAG, "ERROR ON FETCHING CASES")
-                    Resource.Loading -> {
-                        _uiState.update {
-                            it.copy(isLoading = true)
-                        }
-                        Log.v(TAG, "QUESTIONS LOADING")
-                    }
-
-                    is Resource.Sucess -> {
-                        val cases = caseList.result
-                        _uiState.update {
-                            it.copy(caseList = cases.copyOf().toList(), isLoading = false)
-                        }
-                    }
-
-                }
-
-            }.launchIn(viewModelScope)
+        _uiState.update {
+            it.copy(isLoading = true)
         }
+        getCaseListByUserID(currentUser!!.uid).let {
+            when(it){
+                is Resource.Failure<*> ->  Log.v(TAG, "ERROR ON FETCHING CASES")
+                Resource.Loading -> TODO()
+                is Resource.Sucess -> {
+                    val cases = it.result
+                    _uiState.update {
+                        it.copy(caseList = cases.copyOf().toList(), isLoading = false)
+                    }
+                }
+            }
+        }
+//        getCaseListByUserID(currentUser!!.uid).collectLatest() {
+//            it.onEach { caseList ->
+//                when (caseList) {
+//                    is Resource.Failure<*> -> Log.v(TAG, "ERROR ON FETCHING CASES")
+//                    Resource.Loading -> {
+//                        _uiState.update {
+//                            it.copy(isLoading = true)
+//                        }
+//                        Log.v(TAG, "QUESTIONS LOADING")
+//                    }
+//
+//                    is Resource.Sucess -> {
+//                        val cases = caseList.result
+//                        _uiState.update {
+//                            it.copy(caseList = cases.copyOf().toList(), isLoading = false)
+//                        }
+//                    }
+//
+//                }
+//
+//            }.launchIn(viewModelScope)
+//        }
     }
 }

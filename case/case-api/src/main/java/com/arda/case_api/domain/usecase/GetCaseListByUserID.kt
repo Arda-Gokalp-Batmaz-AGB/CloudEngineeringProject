@@ -5,5 +5,5 @@ import com.arda.core_api.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface GetCaseListByUserID {
-    suspend operator fun invoke(userID : String): Flow<Flow<Resource<List<Case>>>>
+    suspend operator fun invoke(userID : String): Resource<List<Case>>
 }

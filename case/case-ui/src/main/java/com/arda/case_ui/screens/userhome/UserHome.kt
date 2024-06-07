@@ -132,11 +132,38 @@ fun previewUserHome() {
                 selectedCaseID = "",
                 caseList = listOf(
                     Case(
-                        "af", "arda", CaseProcessEnum.on_process,"test", "deneme",
-                        3453545, "QWEQEWQE", CaseLocation("mef üNİ", "bina", "garden", "5")
-                    ), Case(
-                        "af", "gokalp", CaseProcessEnum.on_process,"test", "deneme",
-                        3453545, "QWEQEWQE", CaseLocation("mef üNİ", "bina", "garden", "5")
+                        id = "dictas",
+                        userName = "Keith Dickerson",
+                        assignedOfficerSubRole =null ,
+                        currentProcess = CaseProcessEnum.waiting_for_response,
+                        image = "feugait",
+                        header = "penatibus",
+                        time = 9611,
+                        description = "tortor",
+                        location = CaseLocation(
+                            address = "viris",
+                            place = "quod",
+                            building = "hendrerit",
+                            floor = "docendi"
+                        ),
+                        comments = listOf()
+                    ),
+                    Case(
+                        id = "utamur",
+                        userName = "Simone Shaffer",
+                        assignedOfficerSubRole = null,
+                        currentProcess = CaseProcessEnum.waiting_for_response,
+                        image = "elitr",
+                        header = "vidisse",
+                        time = 9140,
+                        description = "graeco",
+                        location = CaseLocation(
+                            address = "singulis",
+                            place = "persius",
+                            building = "ad",
+                            floor = "dicam"
+                        ),
+                        comments = listOf()
                     )
                 )
             ), navController = rememberNavController()

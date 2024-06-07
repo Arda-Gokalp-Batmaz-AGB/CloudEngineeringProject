@@ -1,12 +1,15 @@
 package com.arda.case_impl.data.repository
 
 import com.arda.case_api.domain.model.Case
+import com.arda.case_api.domain.model.Comment
+import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.util.Resource
-import kotlinx.coroutines.flow.Flow
 
 interface CaseDataRepository {
-    suspend fun getAllCases(): Flow<Flow<Resource<List<Case>>>>
-    suspend fun getCaseListByAssignedOfficerSubRole(): Flow<Flow<Resource<List<Case>>>>
-    suspend fun getCaseListByID(): Flow<Flow<Resource<List<Case>>>>
-
+    suspend fun getAllCases(): Resource<List<Case>>
+    suspend fun addCase(case: Case): String
+    suspend fun addCaseComment(comment: Comment): String
+    suspend fun resolveCase(caseID: String): String
+    suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: OfficierSubRoleEnum): Resource<List<Case>>
+    suspend fun getCaseListByID(caseID : String): Resource<List<Case>>
 }

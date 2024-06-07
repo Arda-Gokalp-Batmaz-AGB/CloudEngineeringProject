@@ -52,6 +52,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.arda.auth_ui.auth.AuthScreen
 import com.arda.auth_ui.auth.AuthViewModel
+import com.arda.case_ui.screens.createcase.CreateCase
+import com.arda.case_ui.screens.createcase.CreateCaseViewModel
 import com.arda.case_ui.screens.userhome.UserHome
 import com.arda.case_ui.screens.userhome.UserHomeViewModel
 import com.arda.cloudengineeringproject.core.waitscreen.WaitScreen
@@ -94,6 +96,12 @@ fun NavGraph(
             val userHomeViewModel = hiltViewModel<UserHomeViewModel>()
             val state by userHomeViewModel.uiState.collectAsState()
             UserHome(userHomeViewModel::onEvent,state, navController)
+        }
+        Parentcomposable(route = NavItem.NewCase.route, navController = navController)
+        {
+            val createCaseViewModel = hiltViewModel<CreateCaseViewModel>()
+            val state by createCaseViewModel.uiState.collectAsState()
+            CreateCase(createCaseViewModel::onEvent,state, navController)
         }
     }
 }

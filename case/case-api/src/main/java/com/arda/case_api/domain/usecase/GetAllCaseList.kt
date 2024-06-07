@@ -5,5 +5,5 @@ import com.arda.core_api.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface GetAllCaseList {
-    suspend operator fun invoke(): Flow<Flow<Resource<List<Case>>>>
+    suspend operator fun invoke():Resource<List<Case>>
 }
