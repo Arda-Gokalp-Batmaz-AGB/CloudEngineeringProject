@@ -3,6 +3,7 @@ package com.arda.cloudengineeringproject.core.ui.navigation.nav
 
 import android.app.Activity
 import android.util.Log
+import android.view.ViewTreeObserver
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.RowScope
@@ -24,15 +25,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
@@ -154,7 +164,7 @@ fun NavGraphBuilder.Parentcomposable(
             Scaffold(
                 modifier = Modifier,//.windowInsetsPadding(WindowInsets.displayCutout).windowInsetsPadding(WindowInsets.safeDrawing)
                 bottomBar = {
-                    val keyboardIsVisible by rememberUpdatedState(newValue = WindowInsets.isImeVisible)//daha efektif bir yol olabilir
+                    val keyboardIsVisible by keyboardAsState()//rememberUpdatedState(newValue = WindowInsets.isImeVisible)//daha efektif bir yol olabilir
                     Log.v(TAG, "Keybord:${keyboardIsVisible} and route =$route")
                     if (!keyboardIsVisible && route != NavItem.Auth.route)
                         BottomBar(navController = navController)
@@ -176,7 +186,24 @@ fun NavGraphBuilder.Parentcomposable(
         }
     }
 }
+@Composable
+fun keyboardAsState(): State<Boolean> {
+    val view = LocalView.current
+    var isImeVisible by remember { mutableStateOf(false) }
 
+    DisposableEffect(LocalWindowInfo.current) {
+        val listener = ViewTreeObserver.OnPreDrawListener {
+            isImeVisible = ViewCompat.getRootWindowInsets(view)
+                ?.isVisible(WindowInsetsCompat.Type.ime()) == true
+            true
+        }
+        view.viewTreeObserver.addOnPreDrawListener(listener)
+        onDispose {
+            view.viewTreeObserver.removeOnPreDrawListener(listener)
+        }
+    }
+    return rememberUpdatedState(isImeVisible)
+}
 @Composable
 fun BottomBar(navController: NavHostController) {
     val screens = listOf(
