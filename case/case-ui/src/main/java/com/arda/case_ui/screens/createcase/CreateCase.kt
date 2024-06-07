@@ -45,7 +45,7 @@ fun CreateCase(
     if (location != null) {
         CaseFormBody(onEvent = onEvent, state = state)
     } else {
-
+        QRScreen(onEvent = onEvent, state = state)
     }
 }
 
@@ -58,7 +58,10 @@ fun CaseFormBody(
 }
 
 @Composable
-fun QRScreen() {
+fun QRScreen(
+    onEvent: (CreateCaseEvent) -> Unit,
+    state: CreateCaseUiState,
+) {
     var code by remember {
         mutableStateOf("")
     }
@@ -125,6 +128,10 @@ fun QRScreen() {
                 },
                 modifier = Modifier.weight(1f)
             )
+            if(code.isNotEmpty())
+                LaunchedEffect(key1 = code){
+                    onEvent(CreateCaseEvent.fillQRCode(code))
+                }
             Text(
                 text = code,
                 fontSize = 20.sp,

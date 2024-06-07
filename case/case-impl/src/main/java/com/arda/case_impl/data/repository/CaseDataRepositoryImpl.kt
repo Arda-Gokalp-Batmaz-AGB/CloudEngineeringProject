@@ -3,6 +3,7 @@ package com.arda.case_impl.data.repository
 import com.arda.case_api.domain.model.Case
 import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CaseProcessEnum
+import com.arda.case_api.domain.model.CategoryEnum
 import com.arda.case_api.domain.model.Comment
 import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.util.Resource
@@ -45,7 +46,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 assignedOfficerSubRole = OfficierSubRoleEnum.electrician,
                 currentProcess = CaseProcessEnum.on_process,
                 image = "url_to_case_image_1",
-                header = "Electrical Fault in Community Hall",
+                header = CategoryEnum.electric.categoryName,
                 time = System.currentTimeMillis(),
                 description = "There is a recurring issue with the main electrical panel.",
                 location = CaseLocation(
@@ -68,7 +69,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 assignedOfficerSubRole = OfficierSubRoleEnum.cleaner,
                 currentProcess = CaseProcessEnum.waiting_for_response,
                 image = "url_to_case_image_2",
-                header = "Urgent Cleaning Required in Lab",
+                header = CategoryEnum.cleaning.categoryName,
                 time = System.currentTimeMillis(),
                 description = "Chemical spill in Lab 3 needs urgent attention.",
                 location = CaseLocation(
@@ -84,7 +85,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 assignedOfficerSubRole = null,
                 currentProcess = CaseProcessEnum.completed,
                 image = "url_to_case_image_3",
-                header = "Gardening Tools Replacement",
+                header = CategoryEnum.office_suplies.categoryName,
                 time = System.currentTimeMillis(),
                 description = "All gardening tools in the greenhouse replaced.",
                 location = CaseLocation(
@@ -100,7 +101,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
                 currentProcess = CaseProcessEnum.failed,
                 image = "url_to_case_image_4",
-                header = "Failed Repair of Fountain",
+                header = CategoryEnum.gardening.categoryName,
                 time = System.currentTimeMillis(),
                 description = "Attempted to fix the central park fountain but the issue persists.",
                 location = CaseLocation(
@@ -116,7 +117,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 assignedOfficerSubRole = OfficierSubRoleEnum.electrician,
                 currentProcess = CaseProcessEnum.on_process,
                 image = "url_to_case_image_5",
-                header = "Lighting Issues in Office Building",
+                header = CategoryEnum.lighting.categoryName,
                 time = System.currentTimeMillis(),
                 description = "Multiple reports of lighting outages on several floors.",
                 location = CaseLocation(

@@ -23,7 +23,9 @@ enum class CaseProcessEnum(val processName: String) {
 }
 enum class CategoryEnum(val categoryName : String){
     empty(""),
-    electric("Electrical"),
+    gardening("Gardening"),
+    electric("Electricity"),
+    cleaning("Cleaning"),
     trash("Trash"),
     office_suplies("Office Suplies"),
     lighting("Lighting"),
