@@ -13,6 +13,7 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +38,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,6 +55,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -100,7 +104,8 @@ fun CaseFormBody(
             style = MaterialTheme.typography.headlineLarge
         )
         LazyColumn(
-            modifier = Modifier,
+            modifier = Modifier
+                .fillMaxWidth(0.9f),
 //                .matchParentSize()
 //                .verticalScroll(
 //                    scroll
@@ -112,8 +117,65 @@ fun CaseFormBody(
             }
             item {
                 HeaderDropDown(onEvent, state)
-//                UploadImage(onEvent = onEvent, state = state)
+            }
+            item {
+                Text(
+                    modifier = Modifier.fillParentMaxHeight(0.1f),
+                    text = "Location",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
+            item {
+                LocationSection(onEvent, state)
+            }
+        }
+    }
+}
 
+@Composable
+fun LazyItemScope.LocationSection(
+    onEvent: (CreateCaseEvent) -> Unit,
+    state: CreateCaseUiState,
+) {
+    val location by rememberUpdatedState(newValue = state.location)
+    Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+//.padding(start = 10.dp)
+            location?.address?.let {
+                Box(modifier = Modifier, contentAlignment = Alignment.Center) {
+                    Text(
+                        modifier = Modifier,
+                        text = "Address:",
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                }
+                TextField(
+                    modifier = Modifier
+                        .background(
+                            MaterialTheme.colorScheme.background,
+                            shape = RoundedCornerShape(15.dp)
+                        )
+                        .weight(1f),
+                    enabled = false,
+                    value = location!!.address,
+                    colors = TextFieldDefaults.colors(
+                        disabledTextColor = Color.Black,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        disabledIndicatorColor = Color.Transparent,
+                        errorIndicatorColor = Color.Transparent,
+                    ),
+                    shape = RoundedCornerShape(20.dp),
+                    onValueChange = { newText ->
+
+                    }
+                )
             }
         }
     }
@@ -366,7 +428,7 @@ fun previewCreateCase() {
                 currentUser = null,
                 addressText = "ea",
                 description = "consetetur",
-                location = null,
+                location = CaseLocation("asfsafsaf", "asfasfsaf", "adsfasfsaf", "asfasfsaf"),
                 categoryEnum = CategoryEnum.cleaning,
                 image = null,
                 imageShowPopUp = false
