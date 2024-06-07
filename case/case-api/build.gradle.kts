@@ -10,5 +10,6 @@ java {
 }
 dependencies {
     coreApi()
-//    coreApi()
+    implementation(Dependencies.kotlinxSerialization)
+    implementation(Dependencies.coroutineCore)
 }
