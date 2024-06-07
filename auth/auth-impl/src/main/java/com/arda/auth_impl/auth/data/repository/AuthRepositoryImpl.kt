@@ -24,7 +24,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     private var tempVerifyID: String? = null
     override val currentUser: MinimizedUser?
-        get() = auth.currentUser.let { x -> x?.uid?.let { MinimizedUser(it,x.displayName!!) } }
+        get() = auth.currentUser.let { x -> x?.uid?.let { MinimizedUser(it,x.displayName!!,x.email!!) } }
 
     private var callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -50,7 +50,7 @@ class AuthRepositoryImpl @Inject constructor(
         ) {
             return@withContext try {
                 val result = auth.signInWithEmailAndPassword(email, password).await()
-                Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid,x.displayName!!) })
+                Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid,x.displayName!!,x.email!!) })
             } catch (e: Exception) {
                 e.printStackTrace()
                 Resource.Failure<Exception>(e)
@@ -67,7 +67,7 @@ class AuthRepositoryImpl @Inject constructor(
                     UserProfileChangeRequest.Builder().setDisplayName(role).build()
                 )?.await()
 
-                Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid,x.displayName!!) })
+                Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid,x.displayName!!,x.email!!) })
             } catch (e: Exception) {
                 e.printStackTrace()
                 Resource.Failure<Exception>(e)
@@ -80,7 +80,7 @@ class AuthRepositoryImpl @Inject constructor(
         return@withContext try {
             val credential = PhoneAuthProvider.getCredential(tempVerifyID!!, verifyCode)
             val result = auth.signInWithCredential(credential).await()
-            Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid,x.displayName!!) })
+            Resource.Sucess(result.user!!.let { x -> MinimizedUser(x.uid,x.displayName!!,x.email!!) })
         } catch (e: Exception) {
             e.printStackTrace()
             Resource.Failure<Exception>(e)

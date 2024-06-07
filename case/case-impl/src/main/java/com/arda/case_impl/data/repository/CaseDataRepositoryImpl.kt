@@ -10,6 +10,7 @@ import com.arda.core_api.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDate
 import javax.inject.Inject
 
 class CaseDataRepositoryImpl @Inject constructor(
@@ -23,7 +24,7 @@ class CaseDataRepositoryImpl @Inject constructor(
         }
 
     override suspend fun addCase(case: Case): String {
-        TODO("Not yet implemented")
+        return "Case with ID ${case.id} added sucessfully!"
     }
 
     override suspend fun addCaseComment(comment: Comment): String {
@@ -47,7 +48,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 currentProcess = CaseProcessEnum.on_process,
                 image = "url_to_case_image_1",
                 header = CategoryEnum.electric.categoryName,
-                time = System.currentTimeMillis(),
+                time = LocalDate.now(),
                 description = "There is a recurring issue with the main electrical panel.",
                 location = CaseLocation(
                     address = "123 Apple Street",
@@ -70,7 +71,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 currentProcess = CaseProcessEnum.waiting_for_response,
                 image = "url_to_case_image_2",
                 header = CategoryEnum.cleaning.categoryName,
-                time = System.currentTimeMillis(),
+                time = LocalDate.now(),
                 description = "Chemical spill in Lab 3 needs urgent attention.",
                 location = CaseLocation(
                     address = "456 Orange Lane",
@@ -86,7 +87,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 currentProcess = CaseProcessEnum.completed,
                 image = "url_to_case_image_3",
                 header = CategoryEnum.office_suplies.categoryName,
-                time = System.currentTimeMillis(),
+                time =  LocalDate.now(),
                 description = "All gardening tools in the greenhouse replaced.",
                 location = CaseLocation(
                     address = "789 Banana Boulevard",
@@ -102,7 +103,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 currentProcess = CaseProcessEnum.failed,
                 image = "url_to_case_image_4",
                 header = CategoryEnum.gardening.categoryName,
-                time = System.currentTimeMillis(),
+                time =  LocalDate.now(),
                 description = "Attempted to fix the central park fountain but the issue persists.",
                 location = CaseLocation(
                     address = "1024 Cherry Circle",
@@ -118,7 +119,7 @@ class CaseDataRepositoryImpl @Inject constructor(
                 currentProcess = CaseProcessEnum.on_process,
                 image = "url_to_case_image_5",
                 header = CategoryEnum.lighting.categoryName,
-                time = System.currentTimeMillis(),
+                time =  LocalDate.now(),
                 description = "Multiple reports of lighting outages on several floors.",
                 location = CaseLocation(
                     address = "321 Grape Road",

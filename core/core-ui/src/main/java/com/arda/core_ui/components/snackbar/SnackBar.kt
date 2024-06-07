@@ -121,7 +121,7 @@ private fun GenericQuestionSituationSnackbar(
                     shape = RoundedCornerShape(15.dp),
                     enabled = true,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary
+                        containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
                     onClick = {
                         snackbarHostState.currentSnackbarData?.dismiss()

@@ -39,6 +39,7 @@ import com.arda.case_api.domain.model.Case
 import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CaseProcessEnum
 import com.arda.core_ui.theme.ProjectTheme
+import java.time.LocalDate
 
 @Composable
 fun UserHome(
@@ -138,7 +139,7 @@ fun previewUserHome() {
                         currentProcess = CaseProcessEnum.waiting_for_response,
                         image = "feugait",
                         header = "penatibus",
-                        time = 9611,
+                        time =  LocalDate.now(),
                         description = "tortor",
                         location = CaseLocation(
                             address = "viris",
@@ -155,7 +156,7 @@ fun previewUserHome() {
                         currentProcess = CaseProcessEnum.waiting_for_response,
                         image = "elitr",
                         header = "vidisse",
-                        time = 9140,
+                        time =  LocalDate.now(),
                         description = "graeco",
                         location = CaseLocation(
                             address = "singulis",

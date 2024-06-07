@@ -4,15 +4,24 @@ import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.arda.case_api.domain.model.Case
 import com.arda.case_api.domain.model.CaseLocation
+import com.arda.case_api.domain.model.CaseProcessEnum
 import com.arda.case_api.domain.usecase.AddCaseUser
+import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
 import com.arda.core_api.util.DebugTagsEnumUtils
+import com.arda.core_ui.utils.ImageProcessUtils.BitmaptoBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +30,8 @@ class CreateCaseViewModel @Inject constructor(
     private val addCaseUser: AddCaseUser,
 ) : ViewModel(), LifecycleObserver {
     private val TAG = DebugTagsEnumUtils.UITag.tag
+    private val currentUser: MinimizedUser?
+        get() = getMinimizedUserUseCase()
 
     private val _uiState = MutableStateFlow(CreateCaseUiState())
     val uiState: StateFlow<CreateCaseUiState> = _uiState.asStateFlow()
@@ -30,11 +41,38 @@ class CreateCaseViewModel @Inject constructor(
             is CreateCaseEvent.fillQRCode -> fillQRCode(event.locationString)
             is CreateCaseEvent.setHeader -> setHeader(event.header)
             is CreateCaseEvent.updateAddres -> TODO()
-            is CreateCaseEvent.updateDescription -> TODO()
+            is CreateCaseEvent.updateDescription -> updateDescription(desc = event.description)
             is CreateCaseEvent.switchImagePopUp -> switchImagePopUp(value = event.bool)
+            is CreateCaseEvent.submitForm -> submitForm(event.snackbarCall,event.navigate)
         }
     }
 
+    fun submitForm(snackbarCall: () -> Job, navigate : () -> Unit) = viewModelScope.launch{
+        addCaseUser(Case(
+            id = UUID.randomUUID().toString(),
+            userName = currentUser!!.email,
+            assignedOfficerSubRole = null,//todo oto rol yada databaseden gelen cevaba göre
+            currentProcess = CaseProcessEnum.waiting_for_response,
+            image = uiState.value.image!!.BitmaptoBase64(),
+            header = uiState.value.selectedCategory,
+            time = LocalDate.now(),
+            description = uiState.value.description,
+            location = CaseLocation(
+                address =  uiState.value.location!!.address,
+                place =  uiState.value.location!!.place,
+                building = uiState.value.location!!.building,
+                floor = uiState.value.location!!.floor
+            ),
+            comments = listOf()
+        ))
+        snackbarCall.invoke().join()
+        navigate.invoke()
+    }
+    private fun updateDescription(desc : String){
+        _uiState.update {
+            it.copy(description = desc)
+        }
+    }
     private fun setHeader(header: String) {
         _uiState.update {
             it.copy(selectedCategory = header)

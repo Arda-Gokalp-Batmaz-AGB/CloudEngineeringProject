@@ -1,8 +1,7 @@
 package com.arda.case_ui.screens.createcase
 
 import android.graphics.Bitmap
-import com.arda.case_api.domain.model.CaseLocation
-import com.arda.case_api.domain.model.CategoryEnum
+import kotlinx.coroutines.Job
 
 sealed class CreateCaseEvent {
     data class fillQRCode(val locationString: String) : CreateCaseEvent()
@@ -11,4 +10,5 @@ sealed class CreateCaseEvent {
     data class setHeader(val header : String) : CreateCaseEvent()
     data class updateDescription(val description : String) : CreateCaseEvent()
     data class updateAddres(val address : String) : CreateCaseEvent()
+    data class submitForm(val snackbarCall: () -> Job, val navigate : () -> Unit) : CreateCaseEvent()
 }

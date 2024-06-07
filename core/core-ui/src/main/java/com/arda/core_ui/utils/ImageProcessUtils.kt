@@ -71,15 +71,15 @@ object ImageProcessUtils {
         return bitmap
     }
 
-    fun BitmaptoBase64(bm: Bitmap): String? {
+    fun Bitmap.BitmaptoBase64(): String {
         val baos = ByteArrayOutputStream()
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val b = baos.toByteArray()
         return Base64.encodeToString(b, Base64.DEFAULT)
     }
     // convert Base64 to Image bitmap
-    fun Base64toBitmap(base64String: String): Bitmap {
-        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
+    fun String.Base64toBitmap(): Bitmap {
+        val decodedBytes = Base64.decode(this, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }
 }

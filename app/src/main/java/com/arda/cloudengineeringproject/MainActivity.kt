@@ -25,6 +25,8 @@ import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_ui.components.providers.LocalSnackbarHostState
 import com.arda.core_ui.components.providers.ProvideSnackBar
 import com.arda.core_ui.components.snackbar.SnackBarShowcase
+import com.arda.core_ui.components.snackbar.SnackBarTypeEnum
+import com.arda.core_ui.components.snackbar.SnackbarData
 import com.arda.core_ui.theme.ProjectTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,10 +67,17 @@ fun MainScreen() {
             SnackbarHost(hostState = snackbarHostState) { data ->
                 val receivedSnackbarData =
                     data.visuals as? com.arda.core_ui.components.snackbar.SnackbarData
-                Log.v(TAG, "snackbar: ${receivedSnackbarData?.message}")//snackbartypes classı lazım
+                Log.v(TAG, "snackbar: ${receivedSnackbarData}")//snackbartypes classı lazım
+                Log.v(TAG, "snackbarmessage: ${receivedSnackbarData?.message}")//snackbartypes classı lazım
                 if (receivedSnackbarData != null) {
                     ProjectTheme() {
                         SnackBarShowcase(receivedSnackbarData)
+                    }
+                }
+                else{
+                    val snackbarData = SnackbarData("Operation Successful!",SnackBarTypeEnum.OPERATION_SUCESS)
+                    ProjectTheme() {
+                        SnackBarShowcase(snackbarData)
                     }
                 }
             }

@@ -172,9 +172,9 @@ fun NavGraphBuilder.Parentcomposable(
             Scaffold(
                 modifier = Modifier,//.windowInsetsPadding(WindowInsets.displayCutout).windowInsetsPadding(WindowInsets.safeDrawing)
                 bottomBar = {
-                    val keyboardIsVisible by keyboardAsState()//rememberUpdatedState(newValue = WindowInsets.isImeVisible)//daha efektif bir yol olabilir
-                    Log.v(TAG, "Keybord:${keyboardIsVisible} and route =$route")
-                    if (!keyboardIsVisible && route != NavItem.Auth.route)
+//                    val keyboardIsVisible by keyboardAsState()//rememberUpdatedState(newValue = WindowInsets.isImeVisible)//daha efektif bir yol olabilir
+//                    Log.v(TAG, "Keybord:${keyboardIsVisible} and route =$route")
+                    if (route != NavItem.Auth.route)//!keyboardIsVisible &&
                         BottomBar(navController = navController)
                 }
             )

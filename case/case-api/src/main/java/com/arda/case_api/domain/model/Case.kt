@@ -2,6 +2,7 @@ package com.arda.case_api.domain.model
 
 import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.domain.enums.RoleEnum
+import java.time.LocalDate
 
 data class Case(
     val id: String,
@@ -10,7 +11,7 @@ data class Case(
     val currentProcess: CaseProcessEnum,
     val image: String,
     val header: String,
-    val time: Long,
+    val time: LocalDate,
     val description: String,
     val location: CaseLocation,
     val comments: List<Comment> = listOf(),

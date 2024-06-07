@@ -19,11 +19,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.rememberScrollState
@@ -31,6 +34,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -45,11 +51,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -61,13 +69,18 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CategoryEnum
 import com.arda.case_api.domain.model.getAllCaseCategories
+import com.arda.case_ui.components.GetSnackBarChoiceCallBack
 import com.arda.case_ui.screens.createcase.components.PhotoPickPopUp
 import com.arda.case_ui.screens.createcase.components.QrCodeAnalyzer
 import com.arda.core_api.util.DebugTagsEnumUtils
+import com.arda.core_ui.components.providers.LocalSnackbarHostState
+import com.arda.core_ui.nav.NavItem
 import com.arda.core_ui.theme.ProjectTheme
 
 private val TAG = DebugTagsEnumUtils.UITag.tag
@@ -76,11 +89,11 @@ private val TAG = DebugTagsEnumUtils.UITag.tag
 fun CreateCase(
     onEvent: (CreateCaseEvent) -> Unit,
     state: CreateCaseUiState,
-    navController: NavController,
+    navController: NavHostController,
 ) {
     val location: CaseLocation? by rememberUpdatedState(newValue = state.location)
     if (location != null) {
-        CaseFormBody(onEvent = onEvent, state = state)
+        CaseFormBody(onEvent = onEvent, state = state,navController=navController)
     } else {
         QRScreen(onEvent = onEvent, state = state)
     }
@@ -90,6 +103,7 @@ fun CreateCase(
 fun CaseFormBody(
     onEvent: (CreateCaseEvent) -> Unit,
     state: CreateCaseUiState,
+    navController: NavHostController
 ) {
     val scroll = rememberScrollState()
     Column(
@@ -128,7 +142,116 @@ fun CaseFormBody(
             item {
                 LocationSection(onEvent, state)
             }
+            item {
+                Spacer(modifier = Modifier.fillParentMaxHeight(0.05f))
+                Text(
+                    modifier = Modifier.fillParentMaxHeight(0.1f),
+                    text = "Additional Info",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
+            item {
+                FormTextField(
+                    label = "Description", state.description
+                ) { onEvent(CreateCaseEvent.updateDescription(it)) }
+            }
+            item {
+                Spacer(modifier = Modifier.fillParentMaxHeight(0.1f))
+
+            }
+
+            item {
+                submitForm(onEvent = onEvent, navController = navController)
+            }
         }
+    }
+}
+
+@Composable
+fun submitForm(onEvent: (CreateCaseEvent) -> Unit,navController: NavHostController) {
+    val snackbarHostState = LocalSnackbarHostState.current
+    val scope = rememberCoroutineScope()
+    val snackbarCallback =
+        GetSnackBarChoiceCallBack(snackbarHostState, "Case is Sucessfully Created", scope)
+    Button(
+        modifier = Modifier,
+        shape = RoundedCornerShape(15.dp),
+        enabled = true,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.secondary
+        ),
+        onClick = {
+            onEvent(CreateCaseEvent.submitForm(snackbarCallback){
+                navController.navigate(NavItem.Home.route) {
+                    launchSingleTop = true
+                }
+            })
+        }) {
+        Text(
+            text = "Submit",
+            color = MaterialTheme.colorScheme.onSecondary,
+            style = MaterialTheme.typography.titleMedium
+        )
+        Icon(
+            Icons.Filled.Send,
+            contentDescription = "",
+            modifier = Modifier.size(ButtonDefaults.IconSize),
+            tint = MaterialTheme.colorScheme.onSecondary
+        )
+    }
+}
+
+@Composable
+fun LazyItemScope.FormTextField(
+    label: String,
+    text: String,
+    event: (String) -> Unit,
+) {
+    Column(modifier = Modifier, verticalArrangement = Arrangement.spacedBy(20.dp)) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier, contentAlignment = Alignment.Center) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(0.3f),
+                    text = label,
+                    textAlign = TextAlign.Left,
+                    style = MaterialTheme.typography.titleMedium
+                )
+
+            }
+            var focused by remember { mutableStateOf(false) }
+            TextField(
+                modifier = Modifier
+                    .background(
+                        MaterialTheme.colorScheme.onTertiary,
+                        shape = RoundedCornerShape(20.dp)
+                    )
+                    .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
+                    .onFocusChanged {
+                        focused = it.isFocused == true
+                    }
+                    .weight(1f),
+                enabled = true,
+                placeholder = { if (!focused) Text(label) },
+                label = { Text((label), color = Color.Black) },
+                value = text,
+                colors = TextFieldDefaults.colors(
+                    disabledTextColor = Color.Black,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    disabledIndicatorColor = Color.Transparent,
+                    errorIndicatorColor = Color.Transparent,
+                ),
+                shape = RoundedCornerShape(20.dp),
+                onValueChange = { newText ->
+                    event.invoke(newText)
+                }
+            )
+        }
+
     }
 }
 
@@ -138,19 +261,35 @@ fun LazyItemScope.LocationSection(
     state: CreateCaseUiState,
 ) {
     val location by rememberUpdatedState(newValue = state.location)
-    Column(modifier = Modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(
-            modifier = Modifier,
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-//.padding(start = 10.dp)
-            location?.address?.let {
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        AutoFilledTextField(label = "Address:", text = location?.address)
+        AutoFilledTextField(label = "Place:", text = location?.place)
+        AutoFilledTextField(label = "Building:", text = location?.building)
+        AutoFilledTextField(label = "Floor:", text = location?.floor)
+    }
+}
+
+@Composable
+fun ColumnScope.AutoFilledTextField(
+    label: String,
+    text: String?,
+) {
+    text?.let {
+        if (text != "" && text != " ")
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Box(modifier = Modifier, contentAlignment = Alignment.Center) {
                     Text(
-                        modifier = Modifier,
-                        text = "Address:",
-                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(0.3f),
+                        text = label,
+                        textAlign = TextAlign.Left,
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -158,12 +297,13 @@ fun LazyItemScope.LocationSection(
                 TextField(
                     modifier = Modifier
                         .background(
-                            MaterialTheme.colorScheme.background,
-                            shape = RoundedCornerShape(15.dp)
+                            MaterialTheme.colorScheme.onTertiary,
+                            shape = RoundedCornerShape(20.dp)
                         )
+                        .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
                         .weight(1f),
                     enabled = false,
-                    value = location!!.address,
+                    value = text,
                     colors = TextFieldDefaults.colors(
                         disabledTextColor = Color.Black,
                         focusedIndicatorColor = Color.Transparent,
@@ -177,7 +317,6 @@ fun LazyItemScope.LocationSection(
                     }
                 )
             }
-        }
     }
 }
 
@@ -190,7 +329,15 @@ fun LazyItemScope.HeaderDropDown(onEvent: (CreateCaseEvent) -> Unit, state: Crea
     }
 
 
-    OutlinedCard(modifier = Modifier.padding(16.dp)) {
+    OutlinedCard(
+        modifier = Modifier
+            .padding(16.dp)
+            .background(
+                MaterialTheme.colorScheme.onTertiary,
+                shape = RoundedCornerShape(20.dp)
+            )
+            .border(2.dp, Color.Black, shape = RoundedCornerShape(20.dp))
+    ) {
         Row(horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -432,7 +579,8 @@ fun previewCreateCase() {
                 categoryEnum = CategoryEnum.cleaning,
                 image = null,
                 imageShowPopUp = false
-            )
+            ),
+            rememberNavController()
         )
     }
 }
