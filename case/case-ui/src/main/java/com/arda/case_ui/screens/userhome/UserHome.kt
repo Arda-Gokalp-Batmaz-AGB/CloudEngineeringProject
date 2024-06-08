@@ -59,6 +59,7 @@ import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_ui.nav.NavItem
 import com.arda.core_ui.theme.ProjectTheme
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun UserHome(
@@ -143,7 +144,7 @@ fun LazyItemScope.CaseComponent(
                     }
                     Row() {
                         Icon(imageVector = Icons.Filled.Timer, contentDescription = "")
-                        Text(text = "09/06/2024", style = MaterialTheme.typography.titleSmall)
+                        Text(text = case.time.toString(), style = MaterialTheme.typography.titleSmall)
                         //todo düzelt
                     }
                     Row() {
@@ -260,7 +261,7 @@ fun previewUserHome() {
                         currentProcess = CaseProcessEnum.waiting_for_response,
                         image = "feugait",
                         header = "penatibus",
-                        time = LocalDate.now(),
+                        time = LocalDate.of(2024,5,5),
                         description = "tortor",
                         location = CaseLocation(
                             address = "viris",
