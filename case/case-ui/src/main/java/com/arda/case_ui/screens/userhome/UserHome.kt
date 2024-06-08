@@ -249,11 +249,12 @@ fun previewUserHome() {
     ProjectTheme {
         UserHome(
             onEvent = {}, state = UserHomeUiState(
-                currentUser = MinimizedUser(uid = "", role = "Admin", email = "safsaf"),
+                currentUser = MinimizedUser(uid = "JEVjD8jofMY8UmsPozfhTKE4Mey1", role = "Admin", email = "safsaf"),
                 selectedCaseID = "",
                 caseList = listOf(
                     Case(
                         id = "dictas",
+                        userID = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
                         userName = "admin",
                         assignedOfficerSubRole = null,
                         currentProcess = CaseProcessEnum.waiting_for_response,
@@ -271,6 +272,7 @@ fun previewUserHome() {
                     ),
                     Case(
                         id = "utamur",
+                        userID = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
                         userName = "admin",
                         assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
                         currentProcess = CaseProcessEnum.waiting_for_response,

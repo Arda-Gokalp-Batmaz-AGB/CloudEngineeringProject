@@ -6,6 +6,7 @@ import java.time.LocalDate
 
 data class Case(
     val id: String,
+    val userID : String,
     val userName: String,
     val assignedOfficerSubRole: OfficierSubRoleEnum? = null,
     val currentProcess: CaseProcessEnum,

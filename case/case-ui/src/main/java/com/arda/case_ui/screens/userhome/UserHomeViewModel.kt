@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arda.case_api.domain.usecase.GetAllCaseListUseCase
+import com.arda.case_api.domain.usecase.GetCaseListByAssignedOfficerSubRoleUseCase
 import com.arda.case_api.domain.usecase.GetCaseListByUserIDUseCase
 import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
@@ -25,6 +26,7 @@ class UserHomeViewModel @Inject constructor(
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase,
     private val getCaseListByUserIDUseCase: GetCaseListByUserIDUseCase,
     private val getAllCaseListUseCase: GetAllCaseListUseCase,
+    private val getCaseListByAssignedOfficerSubRoleUseCase: GetCaseListByAssignedOfficerSubRoleUseCase
 ) : ViewModel(), LifecycleObserver {
     private val currentUser: MinimizedUser?
         get() = getMinimizedUserUseCase()
@@ -35,9 +37,9 @@ class UserHomeViewModel @Inject constructor(
     private val TAG = DebugTagsEnumUtils.UITag.tag
 
     init {
-        if (currentUser!!.role == RoleEnum.user.toString()) {
+        if (currentUser!!.role == RoleEnum.user.role) {
             listUserCases()
-        } else if (currentUser!!.role == RoleEnum.user.toString()) {
+        } else if (currentUser!!.role == RoleEnum.admin.role) {
             listAdminUseCases()
         } else {
             listOfficierUseCases()
@@ -82,11 +84,39 @@ class UserHomeViewModel @Inject constructor(
         }
     }
 
-    fun listAdminUseCases() {
-
+    fun listAdminUseCases() = viewModelScope.launch {
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
+        getAllCaseListUseCase().let {
+            when (it) {
+                is Resource.Failure<*> -> Log.v(TAG, "ERROR ON FETCHING CASES")
+                Resource.Loading -> TODO()
+                is Resource.Sucess -> {
+                    val cases = it.result
+                    _uiState.update {
+                        it.copy(caseList = cases.copyOf().toList(), isLoading = false)
+                    }
+                }
+            }
+        }
     }
 
-    fun listOfficierUseCases() {
-
+    fun listOfficierUseCases() = viewModelScope.launch {
+        _uiState.update {
+            it.copy(isLoading = true)
+        }
+        getCaseListByAssignedOfficerSubRoleUseCase(currentUser!!.role).let {
+            when (it) {
+                is Resource.Failure<*> -> Log.v(TAG, "ERROR ON FETCHING CASES")
+                Resource.Loading -> TODO()
+                is Resource.Sucess -> {
+                    val cases = it.result
+                    _uiState.update {
+                        it.copy(caseList = cases.copyOf().toList(), isLoading = false)
+                    }
+                }
+            }
+        }
     }
 }

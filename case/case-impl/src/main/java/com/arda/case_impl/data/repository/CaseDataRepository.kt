@@ -10,7 +10,7 @@ interface CaseDataRepository {
     suspend fun addCase(case: Case): String
     suspend fun addCaseComment(comment: Comment): Resource<Comment>
     suspend fun resolveCase(caseID: String): String
-    suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: OfficierSubRoleEnum): Resource<List<Case>>
+    suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: String): Resource<List<Case>>
     suspend fun getCaseListByUserID(userID : String): Resource<List<Case>>
     suspend fun getCaseByCaseID(caseID: String): Resource<Case>
 }

@@ -50,6 +50,7 @@ class CreateCaseViewModel @Inject constructor(
     fun submitForm(snackbarCall: () -> Job, navigate : () -> Unit) = viewModelScope.launch{
         addCaseUserUseCase(Case(
             id = UUID.randomUUID().toString(),
+            userID = currentUser!!.uid,
             userName = currentUser!!.email,
             assignedOfficerSubRole = null,//todo oto rol yada databaseden gelen cevaba göre
             currentProcess = CaseProcessEnum.waiting_for_response,

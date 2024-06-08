@@ -8,7 +8,6 @@ import com.arda.case_api.domain.model.Comment
 import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.util.Resource
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import javax.inject.Inject
@@ -20,7 +19,7 @@ class CaseDataRepositoryImpl @Inject constructor(
         withContext(
             dispatcher
         ) {
-            TODO("Not yet implemented")
+            return@withContext Resource.Sucess(cases)
         }
 
     override suspend fun addCase(case: Case): String {
@@ -35,130 +34,145 @@ class CaseDataRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: OfficierSubRoleEnum): Resource<List<Case>> {
-        TODO("Not yet implemented")
+    override suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: String): Resource<List<Case>> {
+        return Resource.Sucess(cases.filter { x -> x.assignedOfficerSubRole?.role == assignedSubRole })
     }
 
     override suspend fun getCaseListByUserID(userID: String): Resource<List<Case>> {
-        val cases = listOf(
-            Case(
-                id = "C001",
-                userName = "john_doe",
-                assignedOfficerSubRole = OfficierSubRoleEnum.electrician,
-                currentProcess = CaseProcessEnum.on_process,
-                image = "url_to_case_image_1",
-                header = CategoryEnum.electric.categoryName,
-                time = LocalDate.now(),
-                description = "There is a recurring issue with the main electrical panel.",
-                location = CaseLocation(
-                    address = "123 Apple Street",
-                    place = "Community Hall",
-                    building = "Building A",
-                    floor = "Ground"
-                ),
-                comments = listOf(
-                    Comment(
-                        userID = "asfsaf",
-                        userName = "officer_jane",
-                        caseID = "C001",
-                        text = "Inspection scheduled for tomorrow."
-                    )
-                )
-            ),
-            Case(
-                id = "C002",
-                userName = "alice_smith",
-                assignedOfficerSubRole = OfficierSubRoleEnum.cleaner,
-                currentProcess = CaseProcessEnum.waiting_for_response,
-                image = "url_to_case_image_2",
-                header = CategoryEnum.cleaning.categoryName,
-                time = LocalDate.now(),
-                description = "Chemical spill in Lab 3 needs urgent attention.",
-                location = CaseLocation(
-                    address = "456 Orange Lane",
-                    place = "Science Lab",
-                    building = "Building C",
-                    floor = "2"
-                )
-            ),
-            Case(
-                id = "C003",
-                userName = "mike_brown",
-                assignedOfficerSubRole = null,
-                currentProcess = CaseProcessEnum.completed,
-                image = "url_to_case_image_3",
-                header = CategoryEnum.office_suplies.categoryName,
-                time =  LocalDate.now(),
-                description = "All gardening tools in the greenhouse replaced.",
-                location = CaseLocation(
-                    address = "789 Banana Boulevard",
-                    place = "Greenhouse",
-                    building = "Garden Complex",
-                    floor = "N/A"
-                )
-            ),
-            Case(
-                id = "C004",
-                userName = "emily_white",
-                assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
-                currentProcess = CaseProcessEnum.failed,
-                image = "url_to_case_image_4",
-                header = CategoryEnum.gardening.categoryName,
-                time =  LocalDate.now(),
-                description = "Attempted to fix the central park fountain but the issue persists.",
-                location = CaseLocation(
-                    address = "1024 Cherry Circle",
-                    place = "Central Park",
-                    building = "Outdoor",
-                    floor = "N/A"
-                )
-            ),
-            Case(
-                id = "C005",
-                userName = "lucas_green",
-                assignedOfficerSubRole = OfficierSubRoleEnum.electrician,
-                currentProcess = CaseProcessEnum.on_process,
-                image = "url_to_case_image_5",
-                header = CategoryEnum.lighting.categoryName,
-                time =  LocalDate.now(),
-                description = "Multiple reports of lighting outages on several floors.",
-                location = CaseLocation(
-                    address = "321 Grape Road",
-                    place = "Office Building",
-                    building = "Building B",
-                    floor = "Multiple Floors"
-                ),
-                comments = listOf(
-                    Comment(
-                        userID = "asfsaf",
-                        userName = "tech_sam",
-                        caseID = "C005",
-                        text = "Need access to electrical panels on all affected floors."
-                    )
-                )
-            )
-        )
 
-        return Resource.Sucess(cases)
+        return Resource.Sucess(cases.filter { x -> x.userID == userID })
     }
 
     override suspend fun getCaseByCaseID(caseID: String): Resource<Case> {
-        return              Resource.Sucess(Case(
-            id = "C004",
+        return Resource.Sucess(cases.first { x -> x.id == caseID })
+    }
+
+    val cases = listOf(
+        Case(
+            id = "1",
+            userID = "1",
+            userName = "john_doe",
+            assignedOfficerSubRole = OfficierSubRoleEnum.electrician,
+            currentProcess = CaseProcessEnum.on_process,
+            image = "url_to_case_image_1",
+            header = CategoryEnum.electric.categoryName,
+            time = LocalDate.now(),
+            description = "There is a recurring issue with the main electrical panel.",
+            location = CaseLocation(
+                address = "123 Apple Street",
+                place = "Community Hall",
+                building = "Building A",
+                floor = "Ground"
+            ),
+            comments = listOf(
+                Comment(
+                    userID = "asfsaf",
+                    userName = "officer_jane",
+                    caseID = "C001",
+                    text = "Inspection scheduled for tomorrow."
+                )
+            )
+        ),
+        Case(
+            id = "1",
+            userID = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
+            userName = "alice_smith",
+            assignedOfficerSubRole = OfficierSubRoleEnum.cleaner,
+            currentProcess = CaseProcessEnum.waiting_for_response,
+            image = "url_to_case_image_2",
+            header = CategoryEnum.cleaning.categoryName,
+            time = LocalDate.now(),
+            description = "Chemical spill in Lab 3 needs urgent attention.",
+            location = CaseLocation(
+                address = "456 Orange Lane",
+                place = "Science Lab",
+                building = "Building C",
+                floor = "2"
+            )
+        ),
+        Case(
+            id = "2",
+            userID = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
+            userName = "mike_brown",
+            assignedOfficerSubRole = null,
+            currentProcess = CaseProcessEnum.completed,
+            image = "url_to_case_image_3",
+            header = CategoryEnum.office_suplies.categoryName,
+            time = LocalDate.now(),
+            description = "All gardening tools in the greenhouse replaced.",
+            location = CaseLocation(
+                address = "789 Banana Boulevard",
+                place = "Greenhouse",
+                building = "Garden Complex",
+                floor = "N/A"
+            )
+        ),
+        Case(
+            id = "3",
+            userID = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
             userName = "emily_white",
             assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
             currentProcess = CaseProcessEnum.failed,
             image = "url_to_case_image_4",
             header = CategoryEnum.gardening.categoryName,
-            time =  LocalDate.now(),
+            time = LocalDate.now(),
             description = "Attempted to fix the central park fountain but the issue persists.",
             location = CaseLocation(
                 address = "1024 Cherry Circle",
                 place = "Central Park",
                 building = "Outdoor",
                 floor = "N/A"
-            ))
+            )
+        ),
+        Case(
+            id = "4",
+            userID = "34",
+            userName = "lucas_green",
+            assignedOfficerSubRole = OfficierSubRoleEnum.electrician,
+            currentProcess = CaseProcessEnum.on_process,
+            image = "url_to_case_image_5",
+            header = CategoryEnum.lighting.categoryName,
+            time = LocalDate.now(),
+            description = "Multiple reports of lighting outages on several floors.",
+            location = CaseLocation(
+                address = "321 Grape Road",
+                place = "Office Building",
+                building = "Building B",
+                floor = "Multiple Floors"
+            ),
+            comments = listOf(
+                Comment(
+                    userID = "asfsaf",
+                    userName = "tech_sam",
+                    caseID = "C005",
+                    text = "Need access to electrical panels on all affected floors."
+                )
+            )
+        ),
+        Case(
+            id = "4",
+            userID = "34",
+            userName = "lucasasf_green",
+            assignedOfficerSubRole = OfficierSubRoleEnum.cleaner,
+            currentProcess = CaseProcessEnum.on_process,
+            image = "url_to_case_image_5",
+            header = CategoryEnum.lighting.categoryName,
+            time = LocalDate.now(),
+            description = "adfdafdafdafda.",
+            location = CaseLocation(
+                address = "321 Grape Road",
+                place = "Office Building",
+                building = "Building B",
+                floor = "Multiple Floors"
+            ),
+            comments = listOf(
+                Comment(
+                    userID = "asfssafsafaf",
+                    userName = "tesafsafch_sam",
+                    caseID = "C005",
+                    text = "Need access to electrical panels on all affected floors."
+                )
+            )
         )
-    }
-
+    )
 }

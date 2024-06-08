@@ -58,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.arda.auth_ui.R
 import com.arda.case_api.domain.model.Case
@@ -68,6 +69,7 @@ import com.arda.case_ui.screens.createcase.components.PhotoPickPopUp
 import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
+import com.arda.core_ui.nav.NavItem
 import com.arda.core_ui.theme.ProjectTheme
 import com.arda.core_ui.theme.backgroundColor
 import java.time.LocalDate
@@ -78,13 +80,14 @@ fun CaseDetail(
     state: CaseDetailUiState,
     navController: NavHostController,
 ) {
-    CaseDetailBody(onEvent = onEvent, state = state)
+    CaseDetailBody(onEvent = onEvent, state = state,navController=navController)
 }
 
 @Composable
 fun CaseDetailBody(
     onEvent: (CaseDetailEvent) -> Unit,
     state: CaseDetailUiState,
+    navController : NavHostController
 ) {
     Box(modifier = Modifier.fillMaxSize(1f), contentAlignment = Alignment.TopCenter) {
         if (state.currentUser!!.role != RoleEnum.user.toString())
@@ -103,6 +106,9 @@ fun CaseDetailBody(
                 Row(horizontalArrangement = Arrangement.SpaceAround) {
                     IconButton(onClick = {
                         onEvent(CaseDetailEvent.resolveCase(CaseProcessEnum.completed))
+                        navController.navigate(NavItem.Home.route) {
+                            launchSingleTop = true
+                        }
                     }) {
                         Icon(
                             modifier = Modifier.size(50.dp),
@@ -114,7 +120,9 @@ fun CaseDetailBody(
                     Spacer(modifier = Modifier.weight(1f))
                     IconButton(onClick = {
                         onEvent(CaseDetailEvent.resolveCase(CaseProcessEnum.failed))
-
+                        navController.navigate(NavItem.Home.route) {
+                            launchSingleTop = true
+                        }
                     }) {
                         Icon(
                             modifier = Modifier.size(50.dp),
@@ -444,13 +452,14 @@ fun previewCaseDetail() {
         CaseDetailBody(
             onEvent = {}, state = CaseDetailUiState(
                 currentUser = MinimizedUser(
-                    uid = "verear",
+                    uid = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
                     role = "malorum",
                     email = "bennett.hurst@example.com"
                 ),
                 loading = false,
                 case = Case(
                     id = "odio",
+                    userID = "JEVjD8jofMY8UmsPozfhTKE4Mey1",
                     userName = "Beverley Carson",
                     assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
                     currentProcess = CaseProcessEnum.waiting_for_response,
@@ -477,7 +486,8 @@ fun previewCaseDetail() {
                 enteredComment = "it is resvoledresvoledresvoled",
                 commentImage = null,
                 imageShowPopUp = false
-            )
+            ),
+            navController = rememberNavController()
         )
     }
 }

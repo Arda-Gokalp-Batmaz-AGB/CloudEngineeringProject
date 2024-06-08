@@ -10,7 +10,7 @@ import javax.inject.Inject
 class GetCaseListByAssignedOfficerSubRoleUseCaseImpl @Inject constructor(
     private val caseDataRepository: CaseDataRepository,
 ) : GetCaseListByAssignedOfficerSubRoleUseCase {
-    override suspend fun invoke(assignedSubRole: OfficierSubRoleEnum): Resource<List<Case>> {
+    override suspend fun invoke(assignedSubRole: String): Resource<List<Case>> {
        return caseDataRepository.getCaseListByAssignedOfficerSubRole(assignedSubRole)
     }
 }
