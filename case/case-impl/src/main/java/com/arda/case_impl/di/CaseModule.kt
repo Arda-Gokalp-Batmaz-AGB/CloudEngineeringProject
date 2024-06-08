@@ -3,6 +3,7 @@ package com.arda.case_impl.di
 import com.arda.case_api.domain.usecase.AddCaseUser
 import com.arda.case_api.domain.usecase.CommentCase
 import com.arda.case_api.domain.usecase.GetAllCaseList
+import com.arda.case_api.domain.usecase.GetCaseByCaseID
 import com.arda.case_api.domain.usecase.GetCaseListByAssignedOfficerSubRole
 import com.arda.case_api.domain.usecase.GetCaseListByUserID
 import com.arda.case_api.domain.usecase.ResolveCaseOfficer
@@ -11,6 +12,7 @@ import com.arda.case_impl.data.repository.CaseDataRepositoryImpl
 import com.arda.case_impl.usecase.AddCaseUserImpl
 import com.arda.case_impl.usecase.AddCommentCaseImpl
 import com.arda.case_impl.usecase.GetAllCaseListImpl
+import com.arda.case_impl.usecase.GetCaseByCaseIDImpl
 import com.arda.case_impl.usecase.GetCaseListByAssignedOfficerSubRoleImpl
 import com.arda.case_impl.usecase.GetCaseListByUserIDImpl
 import com.arda.case_impl.usecase.ResolveCaseOfficerImpl
@@ -72,6 +74,12 @@ object RepositoryModule {
     fun resolveCaseOfficerUseCase(
         caseDataRepository: CaseDataRepository,
     ): ResolveCaseOfficer = ResolveCaseOfficerImpl(caseDataRepository)
+
+    @Provides
+    @Singleton
+    fun getCaseByCaseIDUseCase(
+        caseDataRepository: CaseDataRepository,
+    ): GetCaseByCaseID = GetCaseByCaseIDImpl(caseDataRepository)
 
     @IoDispatcher
     @Provides

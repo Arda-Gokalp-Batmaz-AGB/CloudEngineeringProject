@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arda.case_api.domain.model.CaseProcessEnum
 import com.arda.case_api.domain.usecase.GetCaseByCaseID
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
@@ -48,6 +49,15 @@ class CaseDetailViewModel @Inject constructor(
     }
 
     fun onEvent(event: CaseDetailEvent) {
+        when(event){
+            is CaseDetailEvent.resolveCase -> resolveCase(event.result)
+            CaseDetailEvent.submitComment -> submitComment()
+        }
+    }
+    fun resolveCase(result: CaseProcessEnum){
+
+    }
+    fun submitComment(){
 
     }
 }
