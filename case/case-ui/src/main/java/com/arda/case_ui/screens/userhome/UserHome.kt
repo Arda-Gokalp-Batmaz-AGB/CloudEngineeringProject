@@ -52,6 +52,7 @@ import androidx.navigation.compose.rememberNavController
 import com.arda.case_api.domain.model.Case
 import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CaseProcessEnum
+import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.enums.getAllRolesExcludingOfficer
 import com.arda.core_api.domain.model.MinimizedUser
@@ -86,6 +87,7 @@ fun UserHome(
         ) {
             caseList.forEach { x ->
                 item {
+//                    val selectedRoles by rememberUpdatedState(newValue = state.selectedRole)
                     CaseComponent(onEvent, x, state)
                     Spacer(modifier = Modifier.fillParentMaxHeight(0.06f))
                 }
@@ -167,7 +169,7 @@ fun LazyItemScope.CaseComponent(
                     )
                 }
             }
-            if (state.currentUser?.role == RoleEnum.admin.toString()) {
+            if (state.currentUser?.role == RoleEnum.admin.role) {
                 RoleAssignSection(onEvent = onEvent, case = case, state = state)
             }
         }
@@ -182,18 +184,22 @@ fun LazyItemScope.CaseComponent(
 fun RoleAssignSection(onEvent: (UserHomeEvent) -> Unit, case: Case, state: UserHomeUiState) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(modifier=Modifier.size(40.dp),imageVector = Icons.Filled.Assignment, contentDescription = "")
-        RoleDropDown(onEvent = onEvent, state = state)
+        RoleDropDown(onEvent = onEvent, case=case, state = state)
 //        Text(text = "09/06/2024", style = MaterialTheme.typography.titleSmall)
         //todo düzelt
     }
 }
 
 @Composable
-fun RoleDropDown(onEvent: (UserHomeEvent) -> Unit, state: UserHomeUiState) {
+fun RoleDropDown(onEvent: (UserHomeEvent) -> Unit, case: Case,  state: UserHomeUiState) {
     var dropControl by remember { mutableStateOf(false) }
-    val selectedRole by rememberUpdatedState(newValue = state.selectedRole)
-    val categoryList by remember {
-        mutableStateOf(getAllRolesExcludingOfficer())
+//    val selectedRole by rememberUpdatedState(newValue = state.selectedRole)
+    //val selectedRole : String = CategoryEnum.empty.categoryName,
+    val roleList by remember {
+        mutableStateOf(getAllRolesExcludingOfficer().filter { x-> x != "User" && x !="Admin" })
+    }
+    var selectedRole by remember {//
+        mutableStateOf(case.assignedOfficerSubRole?.role ?: RoleEnum.empty.role)
     }
     OutlinedCard(
         modifier = Modifier
@@ -222,12 +228,13 @@ fun RoleDropDown(onEvent: (UserHomeEvent) -> Unit, state: UserHomeUiState) {
         }
         DropdownMenu(expanded = dropControl, onDismissRequest = { dropControl = false }) {
 
-            categoryList.forEach { role ->
+            roleList.forEach { role ->
                 DropdownMenuItem(
                     text = { Text(text = role) },
                     onClick = {
                         dropControl = false
-                        onEvent(UserHomeEvent.selectRole(role))
+                        selectedRole = role
+                        onEvent(UserHomeEvent.selectRole(case.id,role))
                     })
             }
 
@@ -242,7 +249,7 @@ fun previewUserHome() {
     ProjectTheme {
         UserHome(
             onEvent = {}, state = UserHomeUiState(
-                currentUser = MinimizedUser(uid = "", role = "admin", email = "safsaf"),
+                currentUser = MinimizedUser(uid = "", role = "Admin", email = "safsaf"),
                 selectedCaseID = "",
                 caseList = listOf(
                     Case(
@@ -265,7 +272,7 @@ fun previewUserHome() {
                     Case(
                         id = "utamur",
                         userName = "admin",
-                        assignedOfficerSubRole = null,
+                        assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
                         currentProcess = CaseProcessEnum.waiting_for_response,
                         image = "elitr",
                         header = "vidisse",

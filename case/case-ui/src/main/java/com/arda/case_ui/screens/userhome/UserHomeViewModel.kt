@@ -48,14 +48,14 @@ class UserHomeViewModel @Inject constructor(
         when (event) {
             UserHomeEvent.listUserCases -> listUserCases()
             is UserHomeEvent.selectUserCase -> selectCase(event.caseID)
-            is UserHomeEvent.selectRole -> selectRole(event.role)
+            is UserHomeEvent.selectRole -> selectRole(event.caseID,event.role)
         }
     }
 
-    fun selectRole(role: String) {
-        _uiState.update {
-            it.copy(selectedRole = role)
-        }
+    fun selectRole(caseID: String,role: String) {//todo
+//        _uiState.update {
+//            it.copy(selectedRole = role)
+//        }
     }
 
     fun selectCase(caseID: String) {

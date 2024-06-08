@@ -1,21 +1,24 @@
 package com.arda.core_api.domain.enums
 
-enum class RoleEnum {
-    user,
-    admin,
-    officer
+enum class RoleEnum(val role: String) {
+    user("User"),
+    admin("Admin"),
+    officer("Officer"),
+    empty("Select a role")
 //    electrician,
 //    cleaner
 }
 
-enum class OfficierSubRoleEnum {
-    electrician,
-    gardener,
-    cleaner,
+enum class OfficierSubRoleEnum(val role: String) {
+    electrician("Electrician"),
+    gardener("Gardener"),
+    cleaner("Cleaner"),
 }
+
 fun getAllRolesExcludingOfficer(): List<String> {
-    val result = RoleEnum.values().filter { it != RoleEnum.officer } + OfficierSubRoleEnum.values()
-    return result.map { x-> x.toString() }
+    val result = RoleEnum.values().filter { it.role != RoleEnum.officer.role }
+        .map { x -> x.role } + OfficierSubRoleEnum.values().map { x -> x.role }
+    return result.map { x -> x.toString() }
 }
 
 sealed class Role {
