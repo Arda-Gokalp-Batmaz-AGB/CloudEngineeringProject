@@ -81,11 +81,7 @@ fun CaseDetailBody(
     onEvent: (CaseDetailEvent) -> Unit,
     state: CaseDetailUiState,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(1f),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Box(modifier = Modifier.fillMaxSize(1f), contentAlignment = Alignment.TopCenter) {
         if (state.currentUser!!.role != RoleEnum.user.toString())
             Column(
                 modifier = Modifier
@@ -124,7 +120,13 @@ fun CaseDetailBody(
                     }
                 }
             }
-
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize(1f),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.fillMaxHeight(0.15f))
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
@@ -141,10 +143,6 @@ fun CaseDetailBody(
             state.case?.comments?.forEachIndexed { i, x ->
                 item {
                     CommentComponent(x)
-//                    Row {
-//                        Spacer(modifier = Modifier.weight(1f))
-//
-//                    }
                 }
 
             }
@@ -175,7 +173,7 @@ fun CommentWriteSection(
     onEvent: (CaseDetailEvent) -> Unit,
     state: CaseDetailUiState,
 ) {
-        ImageScreenPopUp(onEvent, state)
+    ImageScreenPopUp(onEvent, state)
     Row(
         modifier = Modifier, verticalAlignment = Alignment.CenterVertically
     ) {
@@ -183,7 +181,7 @@ fun CommentWriteSection(
         IconButton(
             modifier = Modifier
                 .size(50.dp),
-                //.clip(RoundedCornerShape(20.dp)),
+            //.clip(RoundedCornerShape(20.dp)),
             onClick = {
                 onEvent(CaseDetailEvent.switchImagePopUp(true))
 
@@ -198,10 +196,9 @@ fun CommentWriteSection(
                 )
                 Image(
                     modifier = Modifier
-                        .fillMaxSize(1f)
+                        .fillMaxSize(1f),
 //                        .clip(RoundedCornerShape(20.dp))
 //                        .border(1.dp, Color.Black)
-                    ,
                     painter = rememberAsyncImagePainter(image),
                     contentScale = ContentScale.FillBounds,
                     contentDescription = null,
@@ -237,7 +234,10 @@ fun CommentWriteSection(
                 onEvent(CaseDetailEvent.updateComment(newText))
             }
         )
-        Button(modifier = Modifier,  colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),onClick = { onEvent(CaseDetailEvent.submitComment) }) {
+        Button(
+            modifier = Modifier,
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+            onClick = { onEvent(CaseDetailEvent.submitComment) }) {
             Text(text = "Send", color = Color.White)
         }
 
@@ -248,7 +248,12 @@ fun CommentWriteSection(
 fun LazyItemScope.CommentComponent(comment: Comment) {
     Column(modifier = Modifier) {
 //        if (comment.image != null)
-        Box(modifier = Modifier.fillMaxWidth().fillParentMaxHeight(0.2f), contentAlignment = Alignment.CenterEnd) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillParentMaxHeight(0.2f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
             Image(
                 painterResource(R.drawable.ic_launcher_foreground),
                 "content description",
