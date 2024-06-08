@@ -48,10 +48,14 @@ import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.arda.auth_ui.auth.AuthScreen
 import com.arda.auth_ui.auth.AuthViewModel
+import com.arda.case_ui.screens.casedetail.CaseDetail
+import com.arda.case_ui.screens.casedetail.CaseDetailViewModel
 import com.arda.case_ui.screens.createcase.CreateCase
 import com.arda.case_ui.screens.createcase.CreateCaseViewModel
 import com.arda.case_ui.screens.userhome.UserHome
@@ -110,6 +114,18 @@ fun NavGraph(
             val profileViewModel = hiltViewModel<ProfileViewModel>()
             val state by profileViewModel.uiState.collectAsState()
             Profile(profileViewModel::onEvent,state, navController)
+        }
+        Parentcomposable(route = NavItem.CaseDetail.route + "/{caseID}"
+            , arguments = listOf(
+                navArgument("caseID") {
+                    type = NavType.StringType
+                },
+            )
+            ,navController = navController)
+        {
+            val caseDetailViewModel = hiltViewModel<CaseDetailViewModel>()
+            val state by caseDetailViewModel.uiState.collectAsState()
+            CaseDetail(caseDetailViewModel::onEvent,state, navController)
         }
     }
 }

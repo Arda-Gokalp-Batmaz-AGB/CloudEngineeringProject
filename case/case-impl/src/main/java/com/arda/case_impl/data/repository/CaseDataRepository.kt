@@ -11,5 +11,6 @@ interface CaseDataRepository {
     suspend fun addCaseComment(comment: Comment): String
     suspend fun resolveCase(caseID: String): String
     suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: OfficierSubRoleEnum): Resource<List<Case>>
-    suspend fun getCaseListByID(caseID : String): Resource<List<Case>>
+    suspend fun getCaseListByUserID(userID : String): Resource<List<Case>>
+    suspend fun getCaseByCaseID(caseID: String): Resource<Case>
 }

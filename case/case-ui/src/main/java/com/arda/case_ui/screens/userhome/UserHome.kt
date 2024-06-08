@@ -1,6 +1,7 @@
 package com.arda.case_ui.screens.userhome
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
@@ -34,10 +36,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.arda.case_api.domain.model.Case
 import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CaseProcessEnum
+import com.arda.core_ui.nav.NavItem
 import com.arda.core_ui.theme.ProjectTheme
 import java.time.LocalDate
 
@@ -67,7 +71,7 @@ fun UserHome(
         ) {
             caseList.forEach { x ->
                 item {
-                    CaseComponent(x)
+                    CaseComponent(onEvent, x)
                     Spacer(modifier = Modifier.fillParentMaxHeight(0.06f))
                 }
             }
@@ -77,14 +81,30 @@ fun UserHome(
 }
 
 @Composable
-fun LazyItemScope.CaseComponent(case: Case) {
+fun RedirectCaseDetails(state: UserHomeUiState,navController: NavHostController){
+    val selectedCaseID by rememberUpdatedState(newValue = state.selectedCaseID)
+    if(selectedCaseID != ""){
+        LaunchedEffect(key1 = true){
+            navController.navigate(NavItem.CaseDetail.route + "$selectedCaseID") {
+                launchSingleTop = true
+            }
+        }
+    }
+}
+@Composable
+fun LazyItemScope.CaseComponent(onEvent: (UserHomeEvent) -> Unit, case: Case) {
     OutlinedCard(
         modifier = Modifier
             .fillParentMaxHeight(0.2f)
-            .fillMaxWidth(1f), shape = RoundedCornerShape(20.dp),
+            .fillMaxWidth(1f)
+            .clickable {
+                onEvent(UserHomeEvent.selectUserCase(case.id))
+            }, shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         )
+
+
     ) {
         Row(modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp)) {
             Column(
@@ -106,14 +126,20 @@ fun LazyItemScope.CaseComponent(case: Case) {
                     Text(text = case.userName, style = MaterialTheme.typography.titleSmall)
                 }
             }
-            Column(modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                modifier = Modifier.weight(1f),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 Image(
                     painterResource(com.arda.auth_ui.R.drawable.ic_launcher_foreground),
                     "content description",
                     modifier = Modifier.clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
-                Text(text = case.currentProcess.processName, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = case.currentProcess.processName,
+                    style = MaterialTheme.typography.bodyMedium
+                )
             }
         }
     }
@@ -135,11 +161,11 @@ fun previewUserHome() {
                     Case(
                         id = "dictas",
                         userName = "Keith Dickerson",
-                        assignedOfficerSubRole =null ,
+                        assignedOfficerSubRole = null,
                         currentProcess = CaseProcessEnum.waiting_for_response,
                         image = "feugait",
                         header = "penatibus",
-                        time =  LocalDate.now(),
+                        time = LocalDate.now(),
                         description = "tortor",
                         location = CaseLocation(
                             address = "viris",
@@ -156,7 +182,7 @@ fun previewUserHome() {
                         currentProcess = CaseProcessEnum.waiting_for_response,
                         image = "elitr",
                         header = "vidisse",
-                        time =  LocalDate.now(),
+                        time = LocalDate.now(),
                         description = "graeco",
                         location = CaseLocation(
                             address = "singulis",

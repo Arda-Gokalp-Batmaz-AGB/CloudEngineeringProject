@@ -42,6 +42,12 @@ sealed class NavItem(
     ) {
         override val title: String = "New Case"
     }
+    object CaseDetail : NavItem(
+        route = "casedetail",
+        icon = Icons.Filled.Add
+    ) {
+        override val title: String = "Case Details"
+    }
 //    object CaseList : NavItem(
 //        route = "caselist",
 //        icon = Icons.Filled.Monitor

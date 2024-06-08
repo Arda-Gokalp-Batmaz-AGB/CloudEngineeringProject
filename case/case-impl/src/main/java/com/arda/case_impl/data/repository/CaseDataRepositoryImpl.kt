@@ -39,7 +39,7 @@ class CaseDataRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getCaseListByID(caseID: String): Resource<List<Case>> {
+    override suspend fun getCaseListByUserID(userID: String): Resource<List<Case>> {
         val cases = listOf(
             Case(
                 id = "C001",
@@ -138,6 +138,25 @@ class CaseDataRepositoryImpl @Inject constructor(
         )
 
         return Resource.Sucess(cases)
+    }
+
+    override suspend fun getCaseByCaseID(caseID: String): Resource<Case> {
+        return              Resource.Sucess(Case(
+            id = "C004",
+            userName = "emily_white",
+            assignedOfficerSubRole = OfficierSubRoleEnum.gardener,
+            currentProcess = CaseProcessEnum.failed,
+            image = "url_to_case_image_4",
+            header = CategoryEnum.gardening.categoryName,
+            time =  LocalDate.now(),
+            description = "Attempted to fix the central park fountain but the issue persists.",
+            location = CaseLocation(
+                address = "1024 Cherry Circle",
+                place = "Central Park",
+                building = "Outdoor",
+                floor = "N/A"
+            ))
+        )
     }
 
 }
