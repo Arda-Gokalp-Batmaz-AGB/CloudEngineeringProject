@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -49,10 +51,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.arda.auth_ui.R
@@ -234,10 +238,16 @@ fun CommentWriteSection(
                 onEvent(CaseDetailEvent.updateComment(newText))
             }
         )
+        val focusManager = LocalFocusManager.current
         Button(
             modifier = Modifier,
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
-            onClick = { onEvent(CaseDetailEvent.submitComment) }) {
+            onClick = {
+                focused = false
+                focusManager.clearFocus()
+
+                onEvent(CaseDetailEvent.submitComment)
+            }) {
             Text(text = "Send", color = Color.White)
         }
 
@@ -246,19 +256,28 @@ fun CommentWriteSection(
 
 @Composable
 fun LazyItemScope.CommentComponent(comment: Comment) {
+    var showImage by remember {
+        mutableStateOf(false)
+    }
+    if (showImage)
+        comment.image?.let { ZoomInImage(image = it) { showImage = it } }
     Column(modifier = Modifier) {
 //        if (comment.image != null)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillParentMaxHeight(0.2f),
+                .fillParentMaxHeight(0.3f),
             contentAlignment = Alignment.CenterEnd
         ) {
             Image(
                 painterResource(R.drawable.ic_launcher_foreground),
                 "content description",
 //                modifier = Modifier.clip(CircleShape),
-                modifier = Modifier.fillMaxHeight(1f),
+                modifier = Modifier
+                    .fillMaxHeight(1f)
+                    .clickable {
+                        showImage = true
+                    },
                 contentScale = ContentScale.Crop
             )
 
@@ -301,15 +320,18 @@ fun LazyItemScope.CommentComponent(comment: Comment) {
 
 @Composable
 fun LazyItemScope.CaseDetailComponent(onEvent: (CaseDetailEvent) -> Unit, case: Case) {
+    var showImage by remember {
+        mutableStateOf(false)
+    }
+    if (showImage)
+        ZoomInImage(image = case.image) { showImage = it }
+
     OutlinedCard(
         modifier = Modifier
             .wrapContentHeight()
 //            .wrapContentHeight(align = Alignment.Top)
 //            .fillParentMaxHeight(0.5f)
-            .fillMaxWidth(1f)
-            .clickable {
-//                onEvent(UserHomeEvent.selectUserCase(case.id))
-            }, shape = RoundedCornerShape(20.dp),
+            .fillMaxWidth(1f), shape = RoundedCornerShape(20.dp),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 10.dp
         )
@@ -357,7 +379,11 @@ fun LazyItemScope.CaseDetailComponent(onEvent: (CaseDetailEvent) -> Unit, case: 
                 Image(
                     painterResource(R.drawable.ic_launcher_foreground),
                     "content description",
-                    modifier = Modifier.clip(CircleShape),
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable {
+                            showImage = true
+                        },
                     contentScale = ContentScale.Crop
                 )
                 Text(
@@ -366,11 +392,43 @@ fun LazyItemScope.CaseDetailComponent(onEvent: (CaseDetailEvent) -> Unit, case: 
                 )
             }
         }
+
+
     }
 
 //    Card(){
 //
 //    }
+}
+
+@Composable
+fun ZoomInImage(image: String, setShowDialog: (Boolean) -> Unit) {
+    Dialog(onDismissRequest = {
+        setShowDialog.invoke(false)
+    }
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(1f),
+            color = Color.Transparent // dialog background
+        ) {//modifier = Modifier.fillMaxSize(1f)
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .border(5.dp, Color.Black, shape = RoundedCornerShape(20.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    painterResource(R.drawable.ic_launcher_foreground),
+                    "content description",
+                    modifier = Modifier
+//                        .clip(RoundedCornerShape(20.dp))
+                        .fillMaxSize(1f),
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+
+        }
+    }
 }
 
 @Composable
