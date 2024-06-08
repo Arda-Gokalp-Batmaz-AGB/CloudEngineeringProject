@@ -8,7 +8,7 @@ data class CaseDetailUiState (
     val currentUser : MinimizedUser? = null,
     val loading : Boolean = false,
     val case: Case? = null,
-    val comment : String = "",
-    val image : Bitmap? = null,
+    val enteredComment : String = "",
+    val commentImage : Bitmap? = null,
     val imageShowPopUp : Boolean = false
 )

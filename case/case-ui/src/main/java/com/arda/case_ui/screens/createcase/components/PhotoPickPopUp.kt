@@ -1,5 +1,6 @@
 package com.arda.case_ui.screens.createcase.components
 
+import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
@@ -57,13 +58,12 @@ enum class PhotoTypeEnum {
 };
 @Composable
 fun PhotoPickPopUp(
-    onEvent: (CreateCaseEvent) -> Unit,
-    state: CreateCaseUiState,
+    addImageEvent: (Bitmap) -> Unit,
     setShowDialog: (Boolean) -> Unit,
 ) {
     var pickedPhotoType by remember { mutableStateOf(PhotoTypeEnum.NAN) }
-    PickImageFromGallery(onEvent, state, pickedPhotoType) { value -> pickedPhotoType = value }
-    PickImageFromCamera(onEvent, state, pickedPhotoType) { value -> pickedPhotoType = value }
+    PickImageFromGallery(addImageEvent, pickedPhotoType) { value -> pickedPhotoType = value }
+    PickImageFromCamera(addImageEvent,  pickedPhotoType) { value -> pickedPhotoType = value }
     Dialog(onDismissRequest = {
         setShowDialog.invoke(false)
     }
@@ -102,20 +102,18 @@ fun PhotoPickPopUp(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        GalleryPopUP(onEvent, state, pickedPhotoType) { value ->
+                        GalleryPopUP(addImageEvent, pickedPhotoType) { value ->
                             pickedPhotoType = value
                         }
-                        CameraPopUP(onEvent, state, pickedPhotoType) { value ->
+                        CameraPopUP(addImageEvent, pickedPhotoType) { value ->
                             pickedPhotoType = value
                         }
                         PickImageFromGallery(
-                            onEvent,
-                            state,
+                            addImageEvent,
                             pickedPhotoType
                         ) { value -> pickedPhotoType = value }
                         PickImageFromCamera(
-                            onEvent,
-                            state,
+                            addImageEvent,
                             pickedPhotoType
                         ) { value -> pickedPhotoType = value }
                     }
@@ -142,8 +140,7 @@ fun PhotoPickPopUp(
 
 @Composable
 fun CameraPopUP(
-    onEvent: (CreateCaseEvent) -> Unit,
-    state: CreateCaseUiState,
+    addImageEvent: (Bitmap) -> Unit,
     pickedPhotoType: PhotoTypeEnum,
     setPhotoType: (value: PhotoTypeEnum) -> Unit,
 ) {
@@ -165,7 +162,7 @@ fun CameraPopUP(
                 //   color = colorResource(id = textColor)
             )
             IconButton(onClick = {
-//                onEvent(StoryEvent.switchStoryPopUp(false))
+//                addImageEvent(StoryEvent.switchStoryPopUp(false))
                 setPhotoType(PhotoTypeEnum.CAMERA)
             }) {
                 Icon(
@@ -183,8 +180,7 @@ fun CameraPopUP(
 
 @Composable
 fun GalleryPopUP(
-    onEvent: (CreateCaseEvent) -> Unit,
-    state: CreateCaseUiState,
+    addImageEvent: (Bitmap) -> Unit,
     pickedPhotoType: PhotoTypeEnum,
     setPhotoType: (value: PhotoTypeEnum) -> Unit,
 ) {
@@ -206,7 +202,7 @@ fun GalleryPopUP(
                 // color = colorResource(id = textColor)
             )
             IconButton(onClick = {
-//                onEvent(StoryEvent.switchStoryPopUp(false))
+//                addImageEvent(StoryEvent.switchStoryPopUp(false))
                 setPhotoType(PhotoTypeEnum.GALLERY)
             }) {
                 Icon(
@@ -224,8 +220,7 @@ fun GalleryPopUP(
 
 @Composable
 fun PickImageFromCamera(
-    onEvent: (CreateCaseEvent) -> Unit,
-    state: CreateCaseUiState,
+    addImageEvent: (Bitmap) -> Unit,
     pickedPhotoType: PhotoTypeEnum,
     setPhotoType: (value: PhotoTypeEnum) -> Unit,
 ) {
@@ -244,17 +239,15 @@ fun PickImageFromCamera(
             if (success == true) {
                 imageUri?.let {
                     if (Build.VERSION.SDK_INT < 28) {
-                        onEvent(
-                            CreateCaseEvent.addImage(
-                                MediaStore.Images.Media.getBitmap(
-                                    context.contentResolver,
-                                    it
-                                )
+                        addImageEvent(
+                            MediaStore.Images.Media.getBitmap(
+                                context.contentResolver,
+                                it
                             )
                         )
                     } else {
                         val source = ImageDecoder.createSource(context.contentResolver, it)
-                        onEvent(CreateCaseEvent.addImage(ImageDecoder.decodeBitmap(source)))
+                        addImageEvent(ImageDecoder.decodeBitmap(source))
                     }
                 }
                 // model.getImageLabels()
@@ -274,8 +267,7 @@ fun PickImageFromCamera(
 
 @Composable
 fun PickImageFromGallery(
-    onEvent: (CreateCaseEvent) -> Unit,
-    state: CreateCaseUiState,
+    addImageEvent: (Bitmap) -> Unit,
     pickedPhotoType: PhotoTypeEnum,
     setPhotoType: (value: PhotoTypeEnum) -> Unit,
 ) {
@@ -285,22 +277,19 @@ fun PickImageFromGallery(
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
-        Log.v(TAG, "Current Bitmap:${state.image}")
         Log.v(TAG, "Current Map:${uri}")
         imageUri = uri
         imageUri?.let {
             if (Build.VERSION.SDK_INT < 28) {
-                onEvent(
-                    CreateCaseEvent.addImage(
-                        MediaStore.Images.Media.getBitmap(
-                            context.contentResolver,
-                            it
-                        )
+                addImageEvent(
+                    MediaStore.Images.Media.getBitmap(
+                        context.contentResolver,
+                        it
                     )
                 )
             } else {
                 val source = ImageDecoder.createSource(context.contentResolver, it)
-                onEvent(CreateCaseEvent.addImage(ImageDecoder.decodeBitmap(source)))
+                addImageEvent(ImageDecoder.decodeBitmap(source))
             }
             //model.getImageLabels()
         }

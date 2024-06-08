@@ -41,6 +41,9 @@ android {
 dependencies {
     compose()
     coreApi()
+    coil()
+    implementation(Dependencies.coroutineCore)
+    implementation(Dependencies.coroutineAndroid)
 //    compos
 
 ////    implementation(platform(Dependencies.firebaseBom))

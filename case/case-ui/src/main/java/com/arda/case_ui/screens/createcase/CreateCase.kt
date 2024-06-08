@@ -76,6 +76,8 @@ import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CategoryEnum
 import com.arda.case_api.domain.model.getAllCaseCategories
 import com.arda.case_ui.components.GetSnackBarChoiceCallBack
+import com.arda.case_ui.screens.casedetail.CaseDetailEvent
+import com.arda.case_ui.screens.casedetail.CaseDetailUiState
 import com.arda.case_ui.screens.createcase.components.PhotoPickPopUp
 import com.arda.case_ui.screens.createcase.components.QrCodeAnalyzer
 import com.arda.core_api.util.DebugTagsEnumUtils
@@ -558,18 +560,20 @@ fun QRScreen(
 //    }
 //}
 
+
 @Composable
 fun ImageScreenPopUp(
     onEvent: (CreateCaseEvent) -> Unit,
     state: CreateCaseUiState,
 ) {
     if (state.imageShowPopUp) {
-        PhotoPickPopUp(onEvent, state, setShowDialog = {
+        PhotoPickPopUp(addImageEvent = {
+            onEvent(CreateCaseEvent.addImage(it))
+        }, setShowDialog = {
             onEvent(CreateCaseEvent.switchImagePopUp(it))
         })
     }
 }
-
 @Composable
 @androidx.compose.ui.tooling.preview.Preview
 fun previewCreateCase() {

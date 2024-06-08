@@ -49,9 +49,10 @@ import java.time.LocalDate
 fun UserHome(
     onEvent: (UserHomeEvent) -> Unit,
     state: UserHomeUiState,
-    navController: NavController,
+    navController: NavHostController,
 ) {
     val caseList by rememberUpdatedState(newValue = state.caseList)
+    RedirectCaseDetails(state = state, navController = navController)
     Column(
         modifier = Modifier.fillMaxSize(1f),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -85,7 +86,7 @@ fun RedirectCaseDetails(state: UserHomeUiState,navController: NavHostController)
     val selectedCaseID by rememberUpdatedState(newValue = state.selectedCaseID)
     if(selectedCaseID != ""){
         LaunchedEffect(key1 = true){
-            navController.navigate(NavItem.CaseDetail.route + "$selectedCaseID") {
+            navController.navigate(NavItem.CaseDetail.route + "/$selectedCaseID") {
                 launchSingleTop = true
             }
         }

@@ -27,8 +27,8 @@ class CaseDataRepositoryImpl @Inject constructor(
         return "Case with ID ${case.id} added sucessfully!"
     }
 
-    override suspend fun addCaseComment(comment: Comment): String {
-        TODO("Not yet implemented")
+    override suspend fun addCaseComment(comment: Comment): Resource<Comment> {
+        return Resource.Sucess(comment)
     }
 
     override suspend fun resolveCase(caseID: String): String {
@@ -58,7 +58,8 @@ class CaseDataRepositoryImpl @Inject constructor(
                 ),
                 comments = listOf(
                     Comment(
-                        username = "officer_jane",
+                        userID = "asfsaf",
+                        userName = "officer_jane",
                         caseID = "C001",
                         text = "Inspection scheduled for tomorrow."
                     )
@@ -129,7 +130,8 @@ class CaseDataRepositoryImpl @Inject constructor(
                 ),
                 comments = listOf(
                     Comment(
-                        username = "tech_sam",
+                        userID = "asfsaf",
+                        userName = "tech_sam",
                         caseID = "C005",
                         text = "Need access to electrical panels on all affected floors."
                     )

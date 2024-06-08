@@ -8,7 +8,7 @@ import com.arda.core_api.util.Resource
 interface CaseDataRepository {
     suspend fun getAllCases(): Resource<List<Case>>
     suspend fun addCase(case: Case): String
-    suspend fun addCaseComment(comment: Comment): String
+    suspend fun addCaseComment(comment: Comment): Resource<Comment>
     suspend fun resolveCase(caseID: String): String
     suspend fun getCaseListByAssignedOfficerSubRole(assignedSubRole: OfficierSubRoleEnum): Resource<List<Case>>
     suspend fun getCaseListByUserID(userID : String): Resource<List<Case>>
