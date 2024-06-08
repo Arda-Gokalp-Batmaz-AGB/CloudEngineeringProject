@@ -1,21 +1,21 @@
 package com.arda.case_impl.di
 
-import com.arda.case_api.domain.usecase.AddCaseUser
-import com.arda.case_api.domain.usecase.AddCommentCase
-import com.arda.case_api.domain.usecase.GetAllCaseList
-import com.arda.case_api.domain.usecase.GetCaseByCaseID
-import com.arda.case_api.domain.usecase.GetCaseListByAssignedOfficerSubRole
-import com.arda.case_api.domain.usecase.GetCaseListByUserID
-import com.arda.case_api.domain.usecase.ResolveCaseOfficer
+import com.arda.case_api.domain.usecase.AddCaseUserUseCase
+import com.arda.case_api.domain.usecase.AddCommentCaseUseCase
+import com.arda.case_api.domain.usecase.GetAllCaseListUseCase
+import com.arda.case_api.domain.usecase.GetCaseByCaseIDUseCase
+import com.arda.case_api.domain.usecase.GetCaseListByAssignedOfficerSubRoleUseCase
+import com.arda.case_api.domain.usecase.GetCaseListByUserIDUseCase
+import com.arda.case_api.domain.usecase.ResolveCaseOfficerUseCase
 import com.arda.case_impl.data.repository.CaseDataRepository
 import com.arda.case_impl.data.repository.CaseDataRepositoryImpl
-import com.arda.case_impl.usecase.AddCaseUserImpl
-import com.arda.case_impl.usecase.AddAddCommentCaseImpl
-import com.arda.case_impl.usecase.GetAllCaseListImpl
-import com.arda.case_impl.usecase.GetCaseByCaseIDImpl
-import com.arda.case_impl.usecase.GetCaseListByAssignedOfficerSubRoleImpl
-import com.arda.case_impl.usecase.GetCaseListByUserIDImpl
-import com.arda.case_impl.usecase.ResolveCaseOfficerImpl
+import com.arda.case_impl.usecase.AddCaseUserUseCaseImpl
+import com.arda.case_impl.usecase.AddAddCommentCaseUseCaseImpl
+import com.arda.case_impl.usecase.GetAllCaseListUseCaseImpl
+import com.arda.case_impl.usecase.GetCaseByCaseIDUseCaseImpl
+import com.arda.case_impl.usecase.GetCaseListByAssignedOfficerSubRoleUseCaseImpl
+import com.arda.case_impl.usecase.GetCaseListByUserIDUseCaseImpl
+import com.arda.case_impl.usecase.ResolveCaseOfficerUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,44 +42,44 @@ object RepositoryModule {
     @Singleton
     fun addCaseUseCase(
         caseDataRepository: CaseDataRepository,
-    ): AddCaseUser = AddCaseUserImpl(caseDataRepository)
+    ): AddCaseUserUseCase = AddCaseUserUseCaseImpl(caseDataRepository)
 
     @Provides
     @Singleton
     fun commentCaseUseCase(
         caseDataRepository: CaseDataRepository,
-    ): AddCommentCase = AddAddCommentCaseImpl(caseDataRepository)
+    ): AddCommentCaseUseCase = AddAddCommentCaseUseCaseImpl(caseDataRepository)
 
     @Provides
     @Singleton
     fun getAllCaseListUseCase(
         caseDataRepository: CaseDataRepository,
-    ): GetAllCaseList = GetAllCaseListImpl(caseDataRepository)
+    ): GetAllCaseListUseCase = GetAllCaseListUseCaseImpl(caseDataRepository)
 
     @Provides
     @Singleton
     fun getCaseListByAssignedOfficerSubRoleUseCase(
         caseDataRepository: CaseDataRepository,
-    ): GetCaseListByAssignedOfficerSubRole =
-        GetCaseListByAssignedOfficerSubRoleImpl(caseDataRepository)
+    ): GetCaseListByAssignedOfficerSubRoleUseCase =
+        GetCaseListByAssignedOfficerSubRoleUseCaseImpl(caseDataRepository)
 
     @Provides
     @Singleton
     fun getCaseListByUserIDUseCase(
         caseDataRepository: CaseDataRepository,
-    ): GetCaseListByUserID = GetCaseListByUserIDImpl(caseDataRepository)
+    ): GetCaseListByUserIDUseCase = GetCaseListByUserIDUseCaseImpl(caseDataRepository)
 
     @Provides
     @Singleton
     fun resolveCaseOfficerUseCase(
         caseDataRepository: CaseDataRepository,
-    ): ResolveCaseOfficer = ResolveCaseOfficerImpl(caseDataRepository)
+    ): ResolveCaseOfficerUseCase = ResolveCaseOfficerUseCaseImpl(caseDataRepository)
 
     @Provides
     @Singleton
     fun getCaseByCaseIDUseCase(
         caseDataRepository: CaseDataRepository,
-    ): GetCaseByCaseID = GetCaseByCaseIDImpl(caseDataRepository)
+    ): GetCaseByCaseIDUseCase = GetCaseByCaseIDUseCaseImpl(caseDataRepository)
 
     @IoDispatcher
     @Provides

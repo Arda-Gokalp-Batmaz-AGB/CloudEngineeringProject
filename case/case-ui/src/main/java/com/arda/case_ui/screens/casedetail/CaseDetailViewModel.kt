@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.arda.case_api.domain.model.CaseProcessEnum
 import com.arda.case_api.domain.model.Comment
-import com.arda.case_api.domain.usecase.AddCommentCase
-import com.arda.case_api.domain.usecase.GetCaseByCaseID
-import com.arda.case_api.domain.usecase.ResolveCaseOfficer
+import com.arda.case_api.domain.usecase.AddCommentCaseUseCase
+import com.arda.case_api.domain.usecase.GetCaseByCaseIDUseCase
+import com.arda.case_api.domain.usecase.ResolveCaseOfficerUseCase
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
 import com.arda.core_api.util.DebugTagsEnumUtils
@@ -27,9 +27,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CaseDetailViewModel @Inject constructor(
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase,
-    private val getCaseByCaseID: GetCaseByCaseID,
-    private val addCommentCase: AddCommentCase,
-    private val resolveCaseOfficer: ResolveCaseOfficer,
+    private val getCaseByCaseIDUseCase: GetCaseByCaseIDUseCase,
+    private val addCommentCase: AddCommentCaseUseCase,
+    private val resolveCaseOfficerUseCase: ResolveCaseOfficerUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(), LifecycleObserver {
     private val TAG = DebugTagsEnumUtils.UITag.tag
@@ -44,7 +44,7 @@ class CaseDetailViewModel @Inject constructor(
     }
 
     fun getCase() = viewModelScope.launch {
-        val case = getCaseByCaseID(caseID)
+        val case = getCaseByCaseIDUseCase(caseID)
         when (case) {
             is Resource.Failure<*> -> TODO()
             Resource.Loading -> TODO()
@@ -73,7 +73,7 @@ class CaseDetailViewModel @Inject constructor(
     }
 
     fun resolveCase(result: CaseProcessEnum) = viewModelScope.launch {
-        resolveCaseOfficer(result.processName)
+        resolveCaseOfficerUseCase(result.processName)
     }
 
     fun submitComment() = viewModelScope.launch {

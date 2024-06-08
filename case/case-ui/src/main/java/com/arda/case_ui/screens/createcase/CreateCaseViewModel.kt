@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.arda.case_api.domain.model.Case
 import com.arda.case_api.domain.model.CaseLocation
 import com.arda.case_api.domain.model.CaseProcessEnum
-import com.arda.case_api.domain.usecase.AddCaseUser
+import com.arda.case_api.domain.usecase.AddCaseUserUseCase
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
 import com.arda.core_api.util.DebugTagsEnumUtils
@@ -27,7 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateCaseViewModel @Inject constructor(
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase,
-    private val addCaseUser: AddCaseUser,
+    private val addCaseUserUseCase: AddCaseUserUseCase,
 ) : ViewModel(), LifecycleObserver {
     private val TAG = DebugTagsEnumUtils.UITag.tag
     private val _uiState = MutableStateFlow(CreateCaseUiState(currentUser=currentUser))
@@ -48,7 +48,7 @@ class CreateCaseViewModel @Inject constructor(
     }
 
     fun submitForm(snackbarCall: () -> Job, navigate : () -> Unit) = viewModelScope.launch{
-        addCaseUser(Case(
+        addCaseUserUseCase(Case(
             id = UUID.randomUUID().toString(),
             userName = currentUser!!.email,
             assignedOfficerSubRole = null,//todo oto rol yada databaseden gelen cevaba göre

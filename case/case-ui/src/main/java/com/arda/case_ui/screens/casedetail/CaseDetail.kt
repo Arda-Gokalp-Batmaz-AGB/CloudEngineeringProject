@@ -69,6 +69,7 @@ import com.arda.core_api.domain.enums.OfficierSubRoleEnum
 import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_ui.theme.ProjectTheme
+import com.arda.core_ui.theme.backgroundColor
 import java.time.LocalDate
 
 @Composable
@@ -303,6 +304,10 @@ fun LazyItemScope.CommentComponent(comment: Comment) {
                 enabled = false,
                 value = "${comment.text}",
                 colors = TextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                    errorContainerColor = MaterialTheme.colorScheme.secondaryContainer,
                     disabledTextColor = Color.Black,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,

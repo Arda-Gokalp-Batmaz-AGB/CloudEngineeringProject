@@ -1,14 +1,12 @@
 package com.arda.case_impl.usecase
 
-import com.arda.case_api.domain.model.Case
-import com.arda.case_api.domain.usecase.ResolveCaseOfficer
+import com.arda.case_api.domain.usecase.ResolveCaseOfficerUseCase
 import com.arda.case_impl.data.repository.CaseDataRepository
-import com.arda.core_api.util.Resource
 import javax.inject.Inject
 
-class ResolveCaseOfficerImpl @Inject constructor(
+class ResolveCaseOfficerUseCaseImpl @Inject constructor(
     private val caseDataRepository: CaseDataRepository,
-) : ResolveCaseOfficer {
+) : ResolveCaseOfficerUseCase {
     override suspend fun invoke(caseID: String): String {
         return caseDataRepository.resolveCase(caseID)
     }
