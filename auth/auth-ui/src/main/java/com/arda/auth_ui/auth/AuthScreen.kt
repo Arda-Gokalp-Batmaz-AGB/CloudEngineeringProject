@@ -103,13 +103,13 @@ fun ImageLogo() {
         elevation = CardDefaults.cardElevation(5.dp)
     )
     {
-//        Image(
-//            modifier = Modifier
-//                .fillMaxSize(),
-//            painter = painterResource(),
-//            contentScale = ContentScale.Crop,
-//            contentDescription = "Logo"
-//        )
+        Image(
+            modifier = Modifier
+                .fillMaxSize(),
+            painter = painterResource(R.drawable.splash_icon),
+            contentScale = ContentScale.Crop,
+            contentDescription = "Logo"
+        )
     }
 
 }

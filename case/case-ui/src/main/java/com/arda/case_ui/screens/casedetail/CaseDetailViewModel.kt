@@ -2,6 +2,7 @@ package com.arda.case_ui.screens.casedetail
 
 import android.graphics.Bitmap
 import android.util.Log
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -16,6 +17,7 @@ import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
 import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_api.util.Resource
 import com.arda.core_api.util.copyOf
+import com.arda.core_ui.utils.ImageProcessUtils.BitmaptoBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -44,13 +46,14 @@ class CaseDetailViewModel @Inject constructor(
     }
 
     fun getCase() = viewModelScope.launch {
+        _uiState.update { it.copy(loading = true) }
         val case = getCaseByCaseIDUseCase(caseID)
         when (case) {
             is Resource.Failure<*> -> TODO()
             Resource.Loading -> TODO()
             is Resource.Sucess -> {
                 _uiState.update {
-                    it.copy(case = case.result)
+                    it.copy(case = case.result, loading = false)
                 }
             }
         }
@@ -73,17 +76,19 @@ class CaseDetailViewModel @Inject constructor(
     }
 
     fun resolveCase(result: CaseProcessEnum) = viewModelScope.launch {
-        resolveCaseOfficerUseCase(result.processName)
+//        resolveCaseOfficerUseCase(result.processName)
     }
 
     fun submitComment() = viewModelScope.launch {
+        _uiState.update { it.copy(loading = true) }
+
         var result = addCommentCase(
             Comment(
                 userID = currentUser!!.uid,
                 userName = currentUser!!.email,
                 caseID = caseID,
                 text = _uiState.value.enteredComment,
-                image = _uiState.value.commentImage?.toString()
+                image = _uiState.value.commentImage?.BitmaptoBase64()
             )
         )
         when (result) {
@@ -92,7 +97,7 @@ class CaseDetailViewModel @Inject constructor(
             is Resource.Sucess -> {
                 val temp = _uiState.value.case!!.comments + listOf(result.result)
                 _uiState.update {
-                    it.copy(case = _uiState.value.case!!.copy(comments = temp.copyOf().toList()))
+                    it.copy(case = _uiState.value.case!!.copy(comments = temp.copyOf().toList()), loading = false)
                 }
             }
         }

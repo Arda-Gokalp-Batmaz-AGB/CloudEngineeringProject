@@ -8,6 +8,7 @@ class ResolveCaseOfficerUseCaseImpl @Inject constructor(
     private val caseDataRepository: CaseDataRepository,
 ) : ResolveCaseOfficerUseCase {
     override suspend fun invoke(caseID: String): String {
+        //return caseDataRepository.resolveCase(caseID) TODO
         return caseDataRepository.resolveCase(caseID)
     }
 

@@ -13,6 +13,7 @@ enum class OfficierSubRoleEnum(val role: String) {
     electrician("Electrician"),
     gardener("Gardener"),
     cleaner("Cleaner"),
+    empty("Select a role")
 }
 
 fun getAllRolesExcludingOfficer(): List<String> {
@@ -20,6 +21,18 @@ fun getAllRolesExcludingOfficer(): List<String> {
         .map { x -> x.role } + OfficierSubRoleEnum.values().map { x -> x.role }
     return result.map { x -> x.toString() }
 }
+
+fun findRole(roleString: String):  OfficierSubRoleEnum? {
+//    RoleEnum.values().find { it.role.equals(roleString, ignoreCase = true) }?.let {
+//        return it
+//    }
+    OfficierSubRoleEnum.values().find { it.role.equals(roleString, ignoreCase = true) }?.let {
+        return it
+    }
+    return null
+}
+
+
 
 sealed class Role {
     abstract val userName: String

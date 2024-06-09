@@ -2,19 +2,23 @@ package com.arda.case_impl.di
 
 import com.arda.case_api.domain.usecase.AddCaseUserUseCase
 import com.arda.case_api.domain.usecase.AddCommentCaseUseCase
+import com.arda.case_api.domain.usecase.AssignRoleToCaseUseCase
 import com.arda.case_api.domain.usecase.GetAllCaseListUseCase
 import com.arda.case_api.domain.usecase.GetCaseByCaseIDUseCase
 import com.arda.case_api.domain.usecase.GetCaseListByAssignedOfficerSubRoleUseCase
 import com.arda.case_api.domain.usecase.GetCaseListByUserIDUseCase
+import com.arda.case_api.domain.usecase.RemoveCaseUseCase
 import com.arda.case_api.domain.usecase.ResolveCaseOfficerUseCase
 import com.arda.case_impl.data.repository.CaseDataRepository
 import com.arda.case_impl.data.repository.CaseDataRepositoryImpl
 import com.arda.case_impl.usecase.AddCaseUserUseCaseImpl
 import com.arda.case_impl.usecase.AddAddCommentCaseUseCaseImpl
+import com.arda.case_impl.usecase.AssignRoleToCaseUseCaseImpl
 import com.arda.case_impl.usecase.GetAllCaseListUseCaseImpl
 import com.arda.case_impl.usecase.GetCaseByCaseIDUseCaseImpl
 import com.arda.case_impl.usecase.GetCaseListByAssignedOfficerSubRoleUseCaseImpl
 import com.arda.case_impl.usecase.GetCaseListByUserIDUseCaseImpl
+import com.arda.case_impl.usecase.RemoveCaseUseCaseImpl
 import com.arda.case_impl.usecase.ResolveCaseOfficerUseCaseImpl
 import dagger.Module
 import dagger.Provides
@@ -80,6 +84,19 @@ object RepositoryModule {
     fun getCaseByCaseIDUseCase(
         caseDataRepository: CaseDataRepository,
     ): GetCaseByCaseIDUseCase = GetCaseByCaseIDUseCaseImpl(caseDataRepository)
+
+
+    @Provides
+    @Singleton
+    fun assignRoleToCaseUseCase(
+        caseDataRepository: CaseDataRepository,
+    ): AssignRoleToCaseUseCase = AssignRoleToCaseUseCaseImpl(caseDataRepository)
+
+    @Provides
+    @Singleton
+    fun RemoveCaseUseCase(
+        caseDataRepository: CaseDataRepository,
+    ): RemoveCaseUseCase = RemoveCaseUseCaseImpl(caseDataRepository)
 
     @IoDispatcher
     @Provides

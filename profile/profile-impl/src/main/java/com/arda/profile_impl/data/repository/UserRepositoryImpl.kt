@@ -16,12 +16,12 @@ class UserRepositoryImpl @Inject constructor(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : UserRepository {
     override val currentFirebaseUser: MinimizedUser?
-        get() = auth.currentUser.let { x -> x?.let { MinimizedUser(it.uid,it.displayName!!,it.email!!) } }
+        get() = auth.currentUser.let { x -> x?.let { MinimizedUser(it.uid,it.displayName!!.capitalize()!!,it.email!!) } }
     private val TAG = DebugTagsEnumUtils.DataTag.tag
     override fun userStateChanges(): Flow<MinimizedUser?> = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener { auth ->
             //trySend(auth.currentUser.let { x-> x?.let { MinimizedUser(it.uid) } }).isSuccess
-            trySend(auth.currentUser.let { x -> x?.let { MinimizedUser(it.uid,it.displayName!!,it.email!!) } }).isSuccess
+            trySend(auth.currentUser.let { x -> x?.let { MinimizedUser(it.uid,it.displayName!!.capitalize()!!,it.email!!) } }).isSuccess
         }
 
         // Add the listener to FirebaseAuth

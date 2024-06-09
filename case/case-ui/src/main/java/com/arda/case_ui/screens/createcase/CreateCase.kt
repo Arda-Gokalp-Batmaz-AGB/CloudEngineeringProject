@@ -84,6 +84,7 @@ import com.arda.core_api.util.DebugTagsEnumUtils
 import com.arda.core_ui.components.providers.LocalSnackbarHostState
 import com.arda.core_ui.nav.NavItem
 import com.arda.core_ui.theme.ProjectTheme
+import com.arda.core_ui.theme.backgroundColor
 
 private val TAG = DebugTagsEnumUtils.UITag.tag
 
@@ -311,6 +312,9 @@ fun ColumnScope.AutoFilledTextField(
                     enabled = false,
                     value = text,
                     colors = TextFieldDefaults.colors(
+                        errorContainerColor = Color.LightGray,
+                        focusedContainerColor = Color.LightGray,
+                        disabledContainerColor = Color.LightGray,
                         disabledTextColor = Color.Black,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
@@ -521,9 +525,10 @@ fun QRScreen(
                     onEvent(CreateCaseEvent.fillQRCode(code))
                 }
             Text(
-                text = code,
+                text = "Scan QR Code ",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(32.dp)

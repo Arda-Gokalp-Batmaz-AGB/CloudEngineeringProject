@@ -197,7 +197,7 @@ fun RoleDropdown(
     var dropControl by remember { mutableStateOf(false) }
     val selectedRole by rememberUpdatedState(newValue = state.selectedRole)
     val roleList by remember {
-        mutableStateOf(getAllRolesExcludingOfficer())
+        mutableStateOf(getAllRolesExcludingOfficer().filter { x-> x != "Select a role" })
     }
 
 

@@ -4,9 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.arda.case_api.domain.usecase.AssignRoleToCaseUseCase
 import com.arda.case_api.domain.usecase.GetAllCaseListUseCase
 import com.arda.case_api.domain.usecase.GetCaseListByAssignedOfficerSubRoleUseCase
 import com.arda.case_api.domain.usecase.GetCaseListByUserIDUseCase
+import com.arda.case_api.domain.usecase.RemoveCaseUseCase
 import com.arda.core_api.domain.enums.RoleEnum
 import com.arda.core_api.domain.model.MinimizedUser
 import com.arda.core_api.domain.usecase.GetMinimizedUserUseCase
@@ -26,7 +28,9 @@ class UserHomeViewModel @Inject constructor(
     private val getMinimizedUserUseCase: GetMinimizedUserUseCase,
     private val getCaseListByUserIDUseCase: GetCaseListByUserIDUseCase,
     private val getAllCaseListUseCase: GetAllCaseListUseCase,
-    private val getCaseListByAssignedOfficerSubRoleUseCase: GetCaseListByAssignedOfficerSubRoleUseCase
+    private val getCaseListByAssignedOfficerSubRoleUseCase: GetCaseListByAssignedOfficerSubRoleUseCase,
+    private val assignRoleToCaseUseCase: AssignRoleToCaseUseCase,
+    private val removeCaseUseCase: RemoveCaseUseCase
 ) : ViewModel(), LifecycleObserver {
     private val currentUser: MinimizedUser?
         get() = getMinimizedUserUseCase()
@@ -51,10 +55,18 @@ class UserHomeViewModel @Inject constructor(
             UserHomeEvent.listUserCases -> listUserCases()
             is UserHomeEvent.selectUserCase -> selectCase(event.caseID)
             is UserHomeEvent.selectRole -> selectRole(event.caseID,event.role)
+            is UserHomeEvent.removeCase -> removeCase(event.caseID)
         }
     }
 
-    fun selectRole(caseID: String,role: String) {//todo
+    fun removeCase(caseID: String) = viewModelScope.launch {
+        removeCaseUseCase(caseID)
+        _uiState.update {
+            it.copy(caseList = it.caseList.filter { x-> x.id != caseID }.copyOf().toList())
+        }
+    }
+    fun selectRole(caseID: String,role: String) = viewModelScope.launch {//todo
+        assignRoleToCaseUseCase(caseID,role)
 //        _uiState.update {
 //            it.copy(selectedRole = role)
 //        }

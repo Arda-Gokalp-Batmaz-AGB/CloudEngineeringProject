@@ -10,12 +10,14 @@ data class CreateCaseUiState (
     val selectedCategory : String = CategoryEnum.empty.categoryName,
     val addressText : String = "",
     val description : String = "",
-    val location: CaseLocation? = CaseLocation(
+    val location: CaseLocation? = //null,
+
+             CaseLocation(
         address = "İstanbul, Sarıyer, Rumelihisarı Mah. Hisarüstü Nispetiye Cad. No: 65",
         place = "",
         building = "Batmaz apt.",
         floor = "5"
-    ), //İstanbul, Sarıyer, Rumelihisarı Mah. Hisarüstü Nispetiye Cad. No: 65;  ;Batmaz apt.;
+    ), //İstanbul, Sarıyer, Rumelihisarı Mah. Hisarüstü Nispetiye Cad. No: 65;  ;Batmaz apt.;5
     val categoryEnum: CategoryEnum = CategoryEnum.empty,
     val image : Bitmap? = null,
     val imageShowPopUp : Boolean = false

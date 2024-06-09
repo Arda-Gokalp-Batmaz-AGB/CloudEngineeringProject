@@ -82,9 +82,9 @@ object ImageProcessUtils {
 
     fun Bitmap.BitmaptoBase64(): String {
         val baos = ByteArrayOutputStream()
-        this.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        this.compress(Bitmap.CompressFormat.JPEG, 20, baos)
         val b = baos.toByteArray()
-        return Base64.encodeToString(b, Base64.DEFAULT)
+        return Base64.encodeToString(b, Base64.DEFAULT).filter { !it.isWhitespace() }
     }
     // convert Base64 to Image bitmap
     fun String.Base64toBitmap(): Bitmap {

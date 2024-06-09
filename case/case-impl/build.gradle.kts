@@ -37,4 +37,6 @@ dependencies {
     coreApi()
     hilt()
     testOnlyKotlin()
+    implementation(Dependencies.httpOk)
+    implementation(Dependencies.gson)
 }

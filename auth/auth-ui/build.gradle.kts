@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.arda.auth_ui"
+    namespace = "com.arda.auth_ui.auth"
     compileSdk = 34
 
     defaultConfig {
